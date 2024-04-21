@@ -139,7 +139,8 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - add the Sanctum EnsureFrontendRequestsAreStateful Middleware by adding $middleware->statefulApi() all to the bootstrap file.
 - TODO: Implement middleware that changes the Accept header to application/json -> Correct handling of unauthorized requests.
 - Start to create tests and then the implementation of the controller:  sail artisan make:test Api/V1/TaskTest
-- 
+- Make StoreTaskRequest to validate the user input in the store request: sail artisan make:request V1/StoreTaskRequest
+- Add class StateEnum for validating states.
 
 
 

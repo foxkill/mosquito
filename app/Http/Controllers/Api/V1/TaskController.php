@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\StateEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreTaskRequest;
 use Illuminate\Http\Request;
 use App\Models\Task;
 
@@ -19,29 +21,30 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        // TODO: check if the user is available.
         $user = auth()->user();
-        
-        $data = request()->only('title', 'description', 'state');
 
-        // TODO: validate the data.
-        // make sure the state is set to: "todo".
+        $data = $request->safe()->only('title', 'description');
+
         return Task::create(
-            array_merge($data, ['user_id' => $user->id])
+            array_merge(
+                $data, 
+                [
+                    'user_id' => $user->id,
+                    // Make sure the state is set to "todo" when creating the task.
+                    'state' => StateEnum::Todo,
+                ]
+            )
         );
     }
-
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Task $task)
+    public function update(Task $task, StoreTaskRequest $request)
     {
-        $data = request()->only('title', 'description', 'state');
-
-        return $task->update($data);
+        return $task->update($request->safe()->only('title', 'description', 'state'));
     }
 
     /**

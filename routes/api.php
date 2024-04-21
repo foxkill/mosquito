@@ -9,4 +9,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware(Authenticate::using('sanctum'));
 
-Route::apiResource('tasks', TaskController::class); 
+Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
+    Route::apiResource('tasks', TaskController::class)->middleware('auth:sanctum');
+});

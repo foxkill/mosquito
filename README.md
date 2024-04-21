@@ -141,6 +141,7 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - Start to create tests and then the implementation of the controller:  sail artisan make:test Api/V1/TaskTest
 - Make StoreTaskRequest to validate the user input in the store request: sail artisan make:request V1/StoreTaskRequest
 - Add class StateEnum for validating states.
+- Add HasApiTokens to the User Model class.
 
 
 

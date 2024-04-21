@@ -126,8 +126,8 @@ Create Table: CREATE TABLE `personal_access_tokens` (
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
--  sail artisan make:migration create_tasks_tablea
--  sail artisan make:model Task -f (i could have use -mf, but ok)
+- sail artisan make:migration create_tasks_table
+- sail artisan make:model Task -f (i should have used -mf, but ok)
 - get the extensions currently used: code --list-extensions
 - added these vscode extension in devcontainer: 
   "bmewburn.vscode-intelephense-client" -> intellisense
@@ -138,6 +138,8 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - check the correctness of the routes: sail artisan route:list
 - add the Sanctum EnsureFrontendRequestsAreStateful Middleware by adding $middleware->statefulApi() all to the bootstrap file.
 - TODO: Implement middleware that changes the Accept header to application/json -> Correct handling of unauthorized requests.
+- Start to create tests and then the implementation of the controller:  sail artisan make:test Api/V1/TaskTest
+- 
 
 
 

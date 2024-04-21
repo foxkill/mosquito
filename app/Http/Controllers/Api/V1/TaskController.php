@@ -21,7 +21,14 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-       // 
+        $user = auth()->user();
+        
+        // Todo: User the authenticated user.
+        $data = request()->only('title', 'description', 'state');
+        // Todo: validate the data.
+        return Task::create(
+            array_merge($data, ['user_id' => $user->id])
+        );
     }
 
     /**

@@ -128,6 +128,8 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
 -  sail artisan make:migration create_tasks_tablea
 -  sail artisan make:model Task -f (i could have use -mf, but ok)
+- added these vscode extension in devcontainer: "bmewburn.vscode-intelephense-client", "xdebug.php-debug"
+
 
 
 

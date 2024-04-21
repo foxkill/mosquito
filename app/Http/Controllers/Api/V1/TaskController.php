@@ -21,37 +21,35 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        // TODO: check if the user is available.
         $user = auth()->user();
         
-        // Todo: User the authenticated user.
         $data = request()->only('title', 'description', 'state');
-        // Todo: validate the data.
+
+        // TODO: validate the data.
+        // make sure the state is set to: "todo".
         return Task::create(
             array_merge($data, ['user_id' => $user->id])
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Task $task)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Task $task)
     {
-        //
+        $data = request()->only('title', 'description', 'state');
+
+        return $task->update($data);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response()->noContent(); 
     }
 }

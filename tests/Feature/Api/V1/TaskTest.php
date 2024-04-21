@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use InvalidArgumentException;
+use PHPUnit\Framework\ExpectationFailedException;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -65,7 +68,6 @@ class TaskTest extends TestCase
         $response = $this->actingAs($user)->postJson(
             route('tasks.store'),
             [
-                'user_id' => $user->id,
                 'title' => $this->faker->sentence(),
                 'state' => 'todo',
                 'description' => $this->faker->realText(),
@@ -75,5 +77,69 @@ class TaskTest extends TestCase
         // Assert.
         $response
             ->assertStatus(201);
+    }
+
+    /**
+     * It should update a task. 
+     */
+    public function test_should_update_a_task(): void 
+    {
+        // Arrange.
+        $user = User::factory()->create();
+
+        $theTask = [
+            'user_id' => $user->id,
+            'title' => 'The Task', 
+            'state' => 'todo',
+            'decription' => 'my description',
+        ];
+
+        $task = Task::create($theTask);
+        
+        // Act.
+        $response = $this->actingAs($user)->putJson(
+            route('tasks.update', ['task' => $task->id]),
+            $expectedData = [
+                'title' => $this->faker->sentence(),
+                'state' => 'in_progres',
+                'description' => $this->faker->sentence(),
+            ]
+        );
+
+        // Assert.
+        $response
+            ->assertStatus(200);
+        
+        // Assert that the data was actually written.
+        $this->assertDatabaseHas(
+            'tasks', 
+            array_merge($expectedData, ['id' => $task->id])
+        );
+    }
+
+    /**
+     * It should delete a task. 
+     */
+    public function test_should_delete_a_task(): void 
+    {
+        // Arrange
+        
+         // Create a user.
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+
+        // Create a task for the user
+        $task = Task::factory()->create(['user_id' => $user->id]);
+
+        // Act
+        // Make a DELETE request to delete the task
+        $response = $this->deleteJson(route('tasks.destroy', ['task' => $task]));
+
+        // Assert that the response is successful
+        $response->assertStatus(204);
+
+        // Assert that the task was deleted from the database
+        $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
     }
 }

@@ -1,66 +1,137 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+# Mosquito Task Management API
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Mosquito is a lightweight task management API designed to allow users to create, update, delete, and list tasks. It provides a simple and efficient way to manage tasks in a multi-user environment.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+To use Mosquito API, follow these steps:
 
-## Learning Laravel
+1. Clone the repository to your local machine:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+git clone https://github.com/foxkill/mosquito.git
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. Navigate to the project directory:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+cd mosquito
+```
 
-## Laravel Sponsors
+3. Install dependencies using Composer:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+composer install
+```
 
-### Premium Partners
+4. Set up your environment by using my separately provided .env
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```
+cp .env  mosquito/
+```
 
-## Contributing
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. Run the database migrations to create the necessary tables:
 
-## Code of Conduct
+```
+php artisan migrate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7. Serve the application:
 
-## Security Vulnerabilities
+```
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The API should now be available at `http://localhost`
+
+## Usage
+
+### Authentication
+
+To access the API endpoints, you must authenticate yourself using JWT (JSON Web Tokens). Send a POST request to the `/api/login` endpoint with your email and password to receive an access token.
+
+Example Request:
+
+```
+POST /api/login
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "secret"
+}
+```
+
+Example Response:
+
+```json
+{
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0a...",
+    "token_type": "Bearer",
+    "expires_in": 3600
+}
+```
+
+Include the access token in the Authorization header of subsequent requests to authenticate yourself.
+
+### Endpoints
+
+- **GET /api/v1/tasks**: Retrieve all tasks belonging to the authenticated user.
+- **POST /api/v1/tasks**: Create a new task.
+- **GET /api/tasks/v1/{id}**: Retrieve a specific task.
+- **PUT /api/tasks/v1/{id}**: Update a task.
+- **DELETE /api/tasks/v1/{id}**: Delete a task.
+
+## Testing
+
+This project includes PHPUnit tests to ensure the correctness of the API functionality. To run the tests, use the following command:
+
+```
+sail artisan test
+```
+
+## Contributors
+
+- Stefan Martin
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License - see the License file for details.
+
+### Preparations
+- add alias: alias sail=vendor/bin/sail to make life easier :)
+- change CACHE_STORAGE in .env to redis
+- change engine entry in config/database.php to use ROW_FORMAT=dynamic
+- enable debugging:
+- add SAIL_XDEBUG_MODE=develop,debug in .env
+- add SAIL_XDEBUG_CONFIG="client_host=localhost" in .env
+- as Laravel 11.0 has no api route file, create it: sail artisan install:api (which installs sanctum too),
+  allow to run the migrations too.
+- check if the engine command use ROW_FORMAT=dynamic
+- sail artisan mysql -h mysql
+- show create table personal_access_tokens\G
+*************************** 1. row ***************************
+       Table: personal_access_tokens
+Create Table: CREATE TABLE `personal_access_tokens` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint unsigned NOT NULL,
+  ...
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
+-  sail artisan make:migration create_tasks_tablea
+-  sail artisan make:model Task -f (i could have use -mf, but ok)
+
+
+
+
+
+
+

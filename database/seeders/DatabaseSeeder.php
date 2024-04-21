@@ -13,11 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create three diffe rent users with different number of tasks.
+        User::factory()
+            ->hasTasks(10)
+            ->create([
+                'name' => 'user1',
+                'email' => 'user1@example.com',
+            ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::factory()
+            ->create([
+                'name' => 'user2',
+                'email' => 'user2@example.com',
+            ]);
+
+        User::factory()
+            ->hasTasks(2000)
+            ->create([
+                'name' => 'user3',
+                'email' => 'user3@example.com',
+            ]);
     }
 }

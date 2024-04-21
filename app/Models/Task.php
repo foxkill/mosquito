@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class User extends Authenticatable
+class Task extends Model
 {
-    use HasFactory, Notifiable;
+     use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +16,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        "title",
+        "description",
+        "state",
+        "user_id",
     ];
 
     /**
@@ -29,8 +28,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
     ];
 
     /**
@@ -40,18 +37,15 @@ class User extends Authenticatable
      */
     protected function casts(): array
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return [];
     }
 
     /**
      * Define the relationship with the User model.
      * 
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function tasks(): HasMany {
-        return $this->hasMany(Task::class);
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 }

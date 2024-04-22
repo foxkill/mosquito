@@ -76,9 +76,9 @@ class TaskTest extends TestCase
         // Assert - repsonse code, data count, title, state, description match.
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJson(
-                Arr::only($task->toArray(), ['title', 'state', 'description']) 
-            );
+            ->assertJson([
+                'data' => Arr::only($task->toArray(), ['title', 'state', 'description']) 
+            ]);
     }
 
     /**
@@ -94,7 +94,7 @@ class TaskTest extends TestCase
 
         $otherUser = User::factory()->create();
 
-        $otherTasks = Task::factory()
+        Task::factory()
             ->count(7)
             ->create(['user_id' => $otherUser->id]);
 
@@ -106,7 +106,9 @@ class TaskTest extends TestCase
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonCount(1)
             ->assertJson([
-                Arr::only($task->toArray(), ['title', 'state', 'description']) 
+                'data' => [
+                    Arr::only($task->toArray(), ['title', 'state', 'description'])
+                ]
             ]);
     }
 

@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Enums\StateEnum;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
@@ -19,7 +21,8 @@ class TaskFactory extends Factory
         return [
             'title' => fake()->sentence,
             'description' => fake()->words(asText:true),
-            'state' => fake()->randomElement(['pending', 'in_progress', 'completed']),
+            'state' => fake()->randomElement(array_map(fn($case) => $case->value, StateEnum::cases())),
+            'user_id' => User::factory()
         ];
     }
 }

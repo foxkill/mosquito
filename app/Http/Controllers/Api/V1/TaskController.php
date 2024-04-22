@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\StateEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StoreTaskRequest;
-use Illuminate\Http\Request;
+use App\Http\Resources\V1\TaskCollection;
+use App\Http\Resources\V1\TaskResource;
+use App\Http\Controllers\Controller;
+use App\Enums\StateEnum;
 use App\Models\Task;
 
 class TaskController extends Controller
@@ -15,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::latest()->get();
+        return TaskResource::collection(Task::latest()->get());
     }
 
     /**
@@ -23,7 +24,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return $task;
+        return new TaskResource($task);
     }
 
     /**

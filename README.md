@@ -33,18 +33,28 @@ composer install
 cp .env  mosquito/
 ```
 
-```
-
-5. Run the database migrations to create the necessary tables:
+5. Install and setup Laravel Sail
 
 ```
-php artisan migrate
+vendor/bin/sail build --no-cache
 ```
 
-7. Serve the application:
+7. Start Laravel Sail with
 
 ```
-php artisan serve
+vendor/bin/sail up -d
+```
+
+
+8. Run the database migrations to create the necessary tables:
+
+```
+vendor/bin/sail artisan migrate
+```
+
+7. Import the routes in Postman
+
+```
 ```
 
 The API should now be available at `http://localhost`
@@ -73,8 +83,7 @@ Example Response:
 ```json
 {
     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0a...",
-    "token_type": "Bearer",
-    "expires_in": 3600
+    "token_type": "Bearer"
 }
 ```
 
@@ -93,7 +102,7 @@ Include the access token in the Authorization header of subsequent requests to a
 This project includes PHPUnit tests to ensure the correctness of the API functionality. To run the tests, use the following command:
 
 ```
-sail artisan test
+vendor/bin/sail artisan test
 ```
 
 ## Contributors
@@ -104,7 +113,7 @@ sail artisan test
 
 This project is licensed under the MIT License - see the License file for details.
 
-### Preparations
+### Steps I used to build the api
 - add alias: alias sail=vendor/bin/sail to make life easier :)
 - change CACHE_STORAGE in .env to redis
 - change engine entry in config/database.php to use ROW_FORMAT=dynamic
@@ -148,9 +157,8 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - Make a resource to deliver only needed fields: sail artisan make:resource V1/TaskResource
 - sail artisan make:middleware AlwaysAcceptJson
 - TOD0: 
-    * Enum
+    * Enum Cast in Model
     * title=max:255 
-    * better provision of tokens.
     * OpenAPI provision
 
 

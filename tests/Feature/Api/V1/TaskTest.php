@@ -9,6 +9,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use InvalidArgumentException;
+use PHPUnit\Framework\ExpectationFailedException;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -18,7 +21,10 @@ class TaskTest extends TestCase
     // To use faker within this test class.
     use WithFaker;
 
-    public function test_no_unauthorized_access() 
+    /**
+     * The Api should not be accessible for unauthorized users.
+     */
+    public function test_no_unauthorized_access(): void
     {
         // Arrange.
         $user = User::factory()->create();
@@ -30,11 +36,56 @@ class TaskTest extends TestCase
         $response = $this->getJson(route('tasks.index'));
 
         // Assert - repsonse code, data count, id & title match.
-        $response->assertStatus(401);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
-     * The api should return a list of Tasks (exam 1).
+     * The api should not incidentally deliver data of other users.
+     */
+    public function test_should_be_able_to_read_task_of_other_users(): void
+    {
+        // Arrange.
+        $currentUser = User::factory()->create();
+        $taskCurrentUser = Task::factory()->create(['user_id' => $currentUser->id]);
+
+        $otherUser = User::factory()->create();
+        $taskOtherUser  = Task::factory()->create(['user_id' => $otherUser->id]);
+
+        // Act
+        $response = $this
+            ->actingAs($currentUser)
+            ->getJson(route('tasks.index', $taskOtherUser));
+
+        // Assert
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * The api should return a task.
+     */
+    public function test_should_read_a_task(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        $task = Task::factory()->create(
+            ['user_id' => $user->id]
+        );
+
+        // Act.
+        $response = $this
+            ->actingAs($user)
+            ->getJson(route('tasks.show', $task));
+
+        // Assert - repsonse code, data count, id & title match.
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson(
+                Arr::only($task->toArray(), ['title', 'state', 'description']) 
+            );
+    }
+
+    /**
+     * The api should return a list of Tasks.
      */
     public function test_should_list_tasks(): void
     {
@@ -49,10 +100,10 @@ class TaskTest extends TestCase
 
         // Assert - repsonse code, data count, id & title match.
         $response
-            ->assertStatus(200)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJsonCount(1)
             ->assertJson([
-                Arr::only($task->toArray(), ['title', 'state']) 
+                Arr::only($task->toArray(), ['title', 'state', 'description']) 
             ]);
     }
 
@@ -134,7 +185,7 @@ class TaskTest extends TestCase
         
         // Act.
         $response = $this->actingAs($user)->putJson(
-            route('tasks.update', ['task' => $task->id]),
+            route('tasks.update', $task),
             $expectedData = [
                 'title' => $this->faker->sentence(),
                 'state' => StateEnum::InProgess,

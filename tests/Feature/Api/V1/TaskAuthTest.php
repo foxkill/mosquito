@@ -2,17 +2,19 @@
 
 namespace Tests\Feature\Api\V1;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 use App\Enums\TaskTokenEnum;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class TaskAuthTest extends TestCase
 {
+    // We must use this trait to create tables.
+    use RefreshDatabase;
+
     /**
      * It should make sure that accessing the 
      * read route with incorrect ablities is denied.

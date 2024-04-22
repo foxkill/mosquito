@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Enums\TaskTokenEnum;
+use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Validation\Rules\Enum;
 
@@ -23,27 +24,4 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
     Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy')->middleware(['auth:sanctum', 'ability:task-delete']);
 });
 
-Route::post('/auth/token', function (Request $request) {
-    $request->validate([
-        'name' => 'required',
-        'password' => 'required',
-    ]);
- 
-    $user = User::where('name', $request->name)->first();
- 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'username' => ['The provided credentials are incorrect.'],
-        ]);
-    }
- 
-    return $user->createToken(
-        'task-access',
-        [
-            TaskTokenEnum::Read,
-            TaskTokenEnum::Create,
-            TaskTokenEnum::Delete,
-            TaskTokenEnum::Update,
-        ]
-    )->plainTextToken;
-});
+Route::post('/login', [AuthController::class, 'login']);

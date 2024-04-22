@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\CreatorScope;
 
+#[ScopedBy([CreatorScope::class])]
 class Task extends Model
 {
      use HasFactory;
@@ -37,6 +40,10 @@ class Task extends Model
      */
     protected function casts(): array
     {
+        // TODO: check if casting works.
+        // return [
+        //     'state' => AsEnumCollection::of(StateEnum::class),
+        // ];
         return [];
     }
 

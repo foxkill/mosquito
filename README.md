@@ -53,7 +53,8 @@ The API should now be available at `http://localhost`
 
 ### Authentication
 
-To access the API endpoints, you must authenticate yourself using JWT (JSON Web Tokens). Send a POST request to the `/api/login` endpoint with your email and password to receive an access token.
+To access the API endpoints, you must authenticate yourself using JWT (JSON Web Tokens). Send a POST request to the 
+`/api/login` endpoint with your email and password to receive an access token.
 
 Example Request:
 
@@ -126,6 +127,7 @@ Create Table: CREATE TABLE `personal_access_tokens` (
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
+- looks good.
 - sail artisan make:migration create_tasks_table
 - sail artisan make:model Task -f (i should have used -mf, but ok)
 - get the extensions currently used: code --list-extensions
@@ -142,6 +144,13 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - Make StoreTaskRequest to validate the user input in the store request: sail artisan make:request V1/StoreTaskRequest
 - Add class StateEnum for validating states.
 - Add HasApiTokens to the User Model class.
+- Add a scope to make sure users have access only to their own tasks: sail artisan make:scope CreatorScope
+- TOD0: 
+    * title=max:255 
+    * Json-Middleware
+    * better provision of tokens.
+    * Use JsonResource
+    * OpenAPI provision
 
 
 

@@ -15,11 +15,12 @@ Route::get('/user', function (Request $request) {
 })->middleware(Authenticate::using('sanctum'));
 
 Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
-    Route::apiResource('tasks', TaskController::class)
-        ->middleware([
-            'auth:sanctum', 
-            'ability:' .  implode(',', array_map(fn($case) => $case->value, TaskTokenEnum::cases())),
-        ]);
+    // Route::apiResource('tasks', TaskController::class)->middleware(['auth:sanctum']);
+    Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index')->middleware(['auth:sanctum', 'ability:task-list']);
+    Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store')->middleware(['auth:sanctum', 'ability:task-create']);
+    Route::get('tasks/{task}', [TaskController::class, 'show'])->name('tasks.show')->middleware(['auth:sanctum', 'ability:task-read']);
+    Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update')->middleware(['auth:sanctum', 'ability:task-update']);
+    Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy')->middleware(['auth:sanctum', 'ability:task-delete']);
 });
 
 Route::post('/auth/token', function (Request $request) {
@@ -39,10 +40,10 @@ Route::post('/auth/token', function (Request $request) {
     return $user->createToken(
         'task-access',
         [
-            TaskTokenEnum::TaskList,
-            TaskTokenEnum::TaskCreate,
-            TaskTokenEnum::TaskDelete,
-            TaskTokenEnum::TaskUpdate,
+            TaskTokenEnum::Read,
+            TaskTokenEnum::Create,
+            TaskTokenEnum::Delete,
+            TaskTokenEnum::Update,
         ]
     )->plainTextToken;
 });

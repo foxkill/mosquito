@@ -17,7 +17,7 @@ class TaskController extends Controller
     {
         return Task::latest()->get();
     }
-    
+
     /**
      * Display the specified resource.
      */
@@ -31,19 +31,15 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        /** @var \App\Model\User $user */
         $user = auth()->user();
-
-        $data = $request->safe()->only('title', 'description');
-
-        return Task::create(
-            array_merge(
-                $data, 
-                [
-                    'user_id' => $user->id,
-                    // Make sure the state is set to "todo" when creating the task.
-                    'state' => StateEnum::Todo,
-                ]
-            )
+        
+        return $user->tasks()->create(
+            $request->safe()->only('title', 'description') +
+            [ 
+                // Make sure the state is set to "todo" when creating a new task.
+                'state' => StateEnum::Todo,
+            ]
         );
     }
 

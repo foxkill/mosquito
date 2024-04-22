@@ -23,7 +23,7 @@ class TaskTest extends TestCase
     /**
      * The Api should not be accessible for unauthorized users.
      */
-    public function tst_no_unauthorized_access(): void
+    public function test_no_unauthorized_access(): void
     {
         // Arrange.
         $user = User::factory()->create();
@@ -41,7 +41,7 @@ class TaskTest extends TestCase
     /**
      * The api should not incidentally deliver data of other users.
      */
-    public function tst_should_not_be_able_to_read_task_of_other_users(): void
+    public function test_should_not_be_able_to_read_task_of_other_users(): void
     {
         // Arrange.
         $otherUser = User::factory()->create();
@@ -75,7 +75,7 @@ class TaskTest extends TestCase
 
         // Assert - repsonse code, data count, title, state, description match.
         $response
-            // ->assertStatus(Response::HTTP_OK)
+            ->assertStatus(Response::HTTP_OK)
             ->assertJson(
                 Arr::only($task->toArray(), ['title', 'state', 'description']) 
             );
@@ -84,7 +84,7 @@ class TaskTest extends TestCase
     /**
      * The api should return a list of tasks.
      */
-    public function tst_should_list_tasks(): void
+    public function test_should_list_tasks(): void
     {
         // Arrange.
         $user = User::factory()->create();
@@ -113,7 +113,7 @@ class TaskTest extends TestCase
     /**
      * It should create a task on behalf of the user.
      */
-    public function tst_should_create_a_task(): void 
+    public function test_should_create_a_task(): void 
     {
         // Arrange.
         $user = User::factory()->create();
@@ -123,7 +123,7 @@ class TaskTest extends TestCase
             route('tasks.store'),
             [
                 'title' => $this->faker->sentence(),
-                'state' => 'todo',
+                'state' => StateEnum::Todo,
                 'description' => $this->faker->realText(),
             ]
         );
@@ -136,7 +136,7 @@ class TaskTest extends TestCase
     /**
      * It should correctly handle an empty request.
      */
-    public function tst_empty_create_task_request(): void 
+    public function test_should_not_create_task_from_empty_data(): void 
     {
         // Arrange.
         $user = User::factory()->create();
@@ -150,9 +150,9 @@ class TaskTest extends TestCase
     }
 
     /**
-     * It should reject a wrong state.
+     * It should reject an invalid input data.
      */
-    public function tst_invalid_state_for_create_task_request(): void 
+    public function test_should_not_create_a_task_from_invalid_data(): void 
     {
         // Arrange.
         $user = User::factory()->create();
@@ -172,19 +172,17 @@ class TaskTest extends TestCase
     /**
      * It should update a task. 
      */
-    public function tst_should_update_a_task(): void 
+    public function test_should_update_a_task(): void 
     {
         // Arrange.
         $user = User::factory()->create();
 
-        $theTask = [
+        $task = Task::create([
             'user_id' => $user->id,
             'title' => 'The Task', 
             'state' => StateEnum::Done,
             'decription' => 'my description',
-        ];
-
-        $task = Task::create($theTask);
+        ]);
         
         // Act.
         $response = $this->actingAs($user)->putJson(
@@ -210,7 +208,7 @@ class TaskTest extends TestCase
     /**
      * It should delete a task. 
      */
-    public function tst_should_delete_a_task(): void 
+    public function test_should_delete_a_task(): void 
     {
         // Arrange
         $user = User::factory()->create();

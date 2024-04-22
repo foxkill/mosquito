@@ -13,6 +13,8 @@ class CreatorScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('user_id', auth()->user()->id);
+        // if (auth()->check()) {
+            $builder->where('user_id', auth()->id());
+        // }
     }
 }

@@ -22,7 +22,7 @@ class TaskFactory extends Factory
             'title' => fake()->sentence,
             'description' => fake()->words(asText:true),
             'state' => fake()->randomElement(array_map(fn($case) => $case->value, StateEnum::cases())),
-            'user_id' => User::factory()
+            'user_id' => User::factory(),
         ];
     }
 }

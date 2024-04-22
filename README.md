@@ -146,9 +146,10 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - Add a scope to make sure users have access only to their own tasks: sail artisan make:scope CreatorScope
 - sail artisan make:test Api/V1/TaskAuthTest for testing the sanctum abilites.
 - Make a resource to deliver only needed fields: sail artisan make:resource V1/TaskResource
+- sail artisan make:middleware AlwaysAcceptJson
 - TOD0: 
+    * Enum
     * title=max:255 
-    * Json-Middleware
     * better provision of tokens.
     * OpenAPI provision
 

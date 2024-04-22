@@ -17,6 +17,14 @@ class TaskController extends Controller
     {
         return Task::latest()->get();
     }
+    
+    /**
+     * Display the specified resource.
+     */
+    public function show(Task $task)
+    {
+        return $task;
+    }
 
     /**
      * Store a newly created resource in storage.

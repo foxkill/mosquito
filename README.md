@@ -163,7 +163,7 @@ which were enabled, I did not implement the auth middleware specifically.
 
 This project is licensed under the MIT License - see the License file for details.
 
-### Steps I used to build the api
+### Steps I made to build the api
 
 - add alias: alias sail=vendor/bin/sail to make life easier :)
 - change CACHE_STORAGE in .env to redis
@@ -223,13 +223,5 @@ sail artisan scribe:generate
 - TOD0: 
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
-    * title=max:255 
-    * Better Exception Handling.
-
-
-
-
-
-
-
-
+    * validation use title=max:255 (part II of the task).
+    * session.php: 'driver' => env('SESSION_DRIVER', 'redis'),

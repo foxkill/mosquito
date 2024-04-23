@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Laravel Documentation</title>
+    <title>Mosquito</title>
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
@@ -103,7 +103,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 22, 2024</li>
+        <li>Last updated: April 23, 2024</li>
     </ul>
 </div>
 
@@ -111,6 +111,7 @@
     <div class="dark-box"></div>
     <div class="content">
         <h1 id="introduction">Introduction</h1>
+<p>Mosquito - A lightweight task api</p>
 <aside>
     <strong>Base URL</strong>: <code>http://localhost</code>
 </aside>
@@ -390,9 +391,9 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"title\": \"et\",
-    \"description\": \"voluptatem\",
-    \"state\": \"in_progress\"
+    \"title\": \"sunt\",
+    \"description\": \"voluptas\",
+    \"state\": \"done\"
 }"
 </code></pre></div>
 
@@ -408,9 +409,9 @@ const headers = {
 };
 
 let body = {
-    "title": "et",
-    "description": "voluptatem",
-    "state": "in_progress"
+    "title": "sunt",
+    "description": "voluptas",
+    "state": "done"
 };
 
 fetch(url, {
@@ -499,10 +500,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="title"                data-endpoint="POSTapi-v1-tasks"
-               value="et"
+               value="sunt"
                data-component="body">
     <br>
-<p>Example: <code>et</code></p>
+<p>Example: <code>sunt</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -510,10 +511,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="POSTapi-v1-tasks"
-               value="voluptatem"
+               value="voluptas"
                data-component="body">
     <br>
-<p>Example: <code>voluptatem</code></p>
+<p>Example: <code>voluptas</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>state</code></b>&nbsp;&nbsp;
@@ -521,10 +522,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="state"                data-endpoint="POSTapi-v1-tasks"
-               value="in_progress"
+               value="done"
                data-component="body">
     <br>
-<p>Example: <code>in_progress</code></p>
+<p>Example: <code>done</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>todo</code></li> <li><code>in_progress</code></li> <li><code>done</code></li></ul>
         </div>
@@ -543,14 +544,14 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/tasks/5" \
+    --get "http://localhost/api/v1/tasks/9" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/tasks/5"
+    "http://localhost/api/v1/tasks/9"
 );
 
 const headers = {
@@ -659,10 +660,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-v1-tasks--id-"
-               value="5"
+               value="9"
                data-component="url">
     <br>
-<p>The ID of the task. Example: <code>5</code></p>
+<p>The ID of the task. Example: <code>9</code></p>
             </div>
                     </form>
 
@@ -679,12 +680,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://localhost/api/v1/tasks/16" \
+    "http://localhost/api/v1/tasks/20" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"title\": \"dolor\",
-    \"description\": \"assumenda\",
+    \"title\": \"sint\",
+    \"description\": \"nihil\",
     \"state\": \"todo\"
 }"
 </code></pre></div>
@@ -692,7 +693,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/tasks/16"
+    "http://localhost/api/v1/tasks/20"
 );
 
 const headers = {
@@ -701,8 +702,8 @@ const headers = {
 };
 
 let body = {
-    "title": "dolor",
-    "description": "assumenda",
+    "title": "sint",
+    "description": "nihil",
     "state": "todo"
 };
 
@@ -792,10 +793,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="PUTapi-v1-tasks--id-"
-               value="16"
+               value="20"
                data-component="url">
     <br>
-<p>The ID of the task. Example: <code>16</code></p>
+<p>The ID of the task. Example: <code>20</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -804,10 +805,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="title"                data-endpoint="PUTapi-v1-tasks--id-"
-               value="dolor"
+               value="sint"
                data-component="body">
     <br>
-<p>Example: <code>dolor</code></p>
+<p>Example: <code>sint</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
@@ -815,10 +816,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="description"                data-endpoint="PUTapi-v1-tasks--id-"
-               value="assumenda"
+               value="nihil"
                data-component="body">
     <br>
-<p>Example: <code>assumenda</code></p>
+<p>Example: <code>nihil</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>state</code></b>&nbsp;&nbsp;
@@ -848,14 +849,14 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost/api/v1/tasks/19" \
+    "http://localhost/api/v1/tasks/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/tasks/19"
+    "http://localhost/api/v1/tasks/1"
 );
 
 const headers = {
@@ -948,10 +949,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-v1-tasks--id-"
-               value="19"
+               value="1"
                data-component="url">
     <br>
-<p>The ID of the task. Example: <code>19</code></p>
+<p>The ID of the task. Example: <code>1</code></p>
             </div>
                     </form>
 
@@ -972,8 +973,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"bhowe@example.net\",
-    \"password\": \"distinctio\"
+    \"email\": \"keebler.kassandra@example.com\",
+    \"password\": \"vel\"
 }"
 </code></pre></div>
 
@@ -989,8 +990,8 @@ const headers = {
 };
 
 let body = {
-    "email": "bhowe@example.net",
-    "password": "distinctio"
+    "email": "keebler.kassandra@example.com",
+    "password": "vel"
 };
 
 fetch(url, {
@@ -1079,10 +1080,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="email"                data-endpoint="POSTapi-login"
-               value="bhowe@example.net"
+               value="keebler.kassandra@example.com"
                data-component="body">
     <br>
-<p>Must be a valid email address. Example: <code>bhowe@example.net</code></p>
+<p>Must be a valid email address. Example: <code>keebler.kassandra@example.com</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -1090,10 +1091,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="POSTapi-login"
-               value="distinctio"
+               value="vel"
                data-component="body">
     <br>
-<p>Example: <code>distinctio</code></p>
+<p>Example: <code>vel</code></p>
         </div>
         </form>
 

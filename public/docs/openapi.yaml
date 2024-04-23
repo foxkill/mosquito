@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Laravel
-  description: ''
+  title: Mosquito
+  description: 'Mosquito - A lightweight task api'
   version: 1.0.0
 servers:
   -
@@ -69,15 +69,15 @@ paths:
                 title:
                   type: string
                   description: ''
-                  example: et
+                  example: sunt
                 description:
                   type: string
                   description: ''
-                  example: voluptatem
+                  example: voluptas
                 state:
                   type: string
                   description: ''
-                  example: in_progress
+                  example: done
                   enum:
                     - todo
                     - in_progress
@@ -127,11 +127,11 @@ paths:
                 title:
                   type: string
                   description: ''
-                  example: dolor
+                  example: sint
                 description:
                   type: string
                   description: ''
-                  example: assumenda
+                  example: nihil
                 state:
                   type: string
                   description: ''
@@ -159,7 +159,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the task.'
-        example: 5
+        example: 9
         required: true
         schema:
           type: integer
@@ -182,11 +182,11 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: bhowe@example.net
+                  example: keebler.kassandra@example.com
                 password:
                   type: string
                   description: ''
-                  example: distinctio
+                  example: vel
               required:
                 - email
                 - password

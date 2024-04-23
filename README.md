@@ -73,8 +73,8 @@ POST /api/login
 Content-Type: application/json
 
 {
-    "email": "user@example.com",
-    "password": "secret"
+    "email": "user1@example.com",
+    "password": "user1pw"
 }
 ```
 
@@ -93,9 +93,9 @@ Include the access token in the Authorization header of subsequent requests to a
 
 - **GET /api/v1/tasks**: Retrieve all tasks belonging to the authenticated user.
 - **POST /api/v1/tasks**: Create a new task.
-- **GET /api/tasks/v1/{id}**: Retrieve a specific task.
-- **PUT /api/tasks/v1/{id}**: Update a task.
-- **DELETE /api/tasks/v1/{id}**: Delete a task.
+- **GET /api/v1/tasks/{id}**: Retrieve a specific task.
+- **PUT /api/v1/tasks/{id}**: Update a task.
+- **DELETE /api/v1/tasks/{id}**: Delete a task.
 
 ## Testing
 
@@ -104,6 +104,54 @@ This project includes PHPUnit tests to ensure the correctness of the API functio
 ```
 vendor/bin/sail artisan test
 ```
+
+It includes two test suites. One for the normal CRUD functionality. One for checking sanctum token abilities
+work correctly.
+
+
+### Documentation of the api
+
+I used knuckleswtf/scribe package to create the OpenAPI Documentaion.
+
+```
+composer require --dev knuckleswtf/scribe
+```
+
+I created the documentation with:
+
+```
+sail artisan scribe:generate
+```
+
+you can access the documentation under
+
+```
+localhost/docs
+```
+
+### Import Routes in Postman
+
+You will find the routes for the import in postman under:
+```
+{project_root}/public/docs/collection.json
+```
+
+### Notes
+
+This would have normally been in my middleware: 
+
+```
+abort_if(! auth()->user()->tokenCan('task-list'), 403); 
+```
+
+But as laravel now provides these two middlewares:
+
+```
+CheckAbilities::class
+CheckForAnyAbility::class
+```
+
+which were enabled, I did not implement the auth middleware specifically.
 
 ## Contributors
 
@@ -114,6 +162,7 @@ vendor/bin/sail artisan test
 This project is licensed under the MIT License - see the License file for details.
 
 ### Steps I used to build the api
+
 - add alias: alias sail=vendor/bin/sail to make life easier :)
 - change CACHE_STORAGE in .env to redis
 - change engine entry in config/database.php to use ROW_FORMAT=dynamic
@@ -123,7 +172,11 @@ This project is licensed under the MIT License - see the License file for detail
 - as Laravel 11.0 has no api route file, create it: sail artisan install:api (which installs sanctum too),
   allow to run the migrations too.
 - check if the engine command use ROW_FORMAT=dynamic
+```
 - sail artisan mysql -h mysql
+```
+then run:
+```
 - show create table personal_access_tokens\G
 *************************** 1. row ***************************
        Table: personal_access_tokens
@@ -136,17 +189,21 @@ Create Table: CREATE TABLE `personal_access_tokens` (
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
+```
 - looks good.
 - sail artisan make:migration create_tasks_table
 - sail artisan make:model Task -f (i should have used -mf, but ok)
+
 - get the extensions currently used: code --list-extensions
 - added these vscode extension in devcontainer: 
   "bmewburn.vscode-intelephense-client" -> intellisense
   "xdebug.php-debug" - debugging
   "rangav.vscode-thunder-client" - api client
+
 - make the controller: sail artisan make:controller Api/V1/TaskController --api
 - add the routes to api.php
 - check the correctness of the routes: sail artisan route:list
+
 - add the Sanctum EnsureFrontendRequestsAreStateful Middleware by adding $middleware->statefulApi() all to the bootstrap file.
 - Start to create tests and then the implementation of the controller:  sail artisan make:test Api/V1/TaskTest
 - Make StoreTaskRequest to validate the user input in the store request: sail artisan make:request V1/StoreTaskRequest
@@ -159,7 +216,7 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - TOD0: 
     * Enum Cast in Model
     * title=max:255 
-    * OpenAPI provision
+    * Better Exception Handling.
 
 
 

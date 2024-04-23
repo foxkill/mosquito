@@ -13,11 +13,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create three different users with different number of tasks.
+        // We need fixed password for generating tokens.
+        User::factory()
+            ->hasTasks(10)
+            ->create([
+                'name' => 'user1',
+                'email' => 'user1@example.com',
+                'password' => 'user1pw'
+            ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::factory()
+            ->create([
+                'name' => 'user2',
+                'email' => 'user2@example.com',
+                'password' => 'user2pw'
+            ]);
+
+        User::factory()
+            ->hasTasks(2000)
+            ->create([
+                'name' => 'user3',
+                'email' => 'user3@example.com',
+                'password' => 'user3pw'
+            ]);
     }
 }

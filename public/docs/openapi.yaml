@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  title: Mosquito
+  description: 'Mosquito - A lightweight task api'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+paths:
+  /api/user:
+    get:
+      summary: ''
+      operationId: getApiUser
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/tasks:
+    get:
+      summary: 'Display a list of tasks for an user.'
+      operationId: displayAListOfTasksForAnUser
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: 'Store a newly created task in the backend.'
+      operationId: storeANewlyCreatedTaskInTheBackend
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: ''
+                  example: ut
+                description:
+                  type: string
+                  description: ''
+                  example: deleniti
+                state:
+                  type: string
+                  description: ''
+                  example: done
+                  enum:
+                    - todo
+                    - in_progress
+                    - done
+              required:
+                - title
+                - description
+                - state
+      security: []
+  '/api/v1/tasks/{id}':
+    get:
+      summary: 'Display a specific task owned by the current user.'
+      operationId: displayASpecificTaskOwnedByTheCurrentUser
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: 'Update a specific task for the current user.'
+      operationId: updateASpecificTaskForTheCurrentUser
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: ''
+                  example: autem
+                description:
+                  type: string
+                  description: ''
+                  example: ratione
+                state:
+                  type: string
+                  description: ''
+                  example: done
+                  enum:
+                    - todo
+                    - in_progress
+                    - done
+              required:
+                - title
+                - description
+                - state
+      security: []
+    delete:
+      summary: 'Remove a specified task for the current user.'
+      operationId: removeASpecifiedTaskForTheCurrentUser
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the task.'
+        example: 3
+        required: true
+        schema:
+          type: integer
+  /api/login:
+    post:
+      summary: 'Log in an user.'
+      operationId: logInAnUser
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: iveum@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: ducimus
+              required:
+                - email
+                - password
+      security: []
+tags:
+  -
+    name: Endpoints
+    description: ''

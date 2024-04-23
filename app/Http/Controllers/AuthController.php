@@ -25,6 +25,8 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        // TODO: handle admin.
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(
                 ['message' => 'The provided credentials are incorrect.'],
@@ -34,9 +36,8 @@ class AuthController extends Controller
 
         return response()->json([
             'access_token' => $user->createToken(
-                'task-access',
+                TaskTokenEnum::NAME,
                 [
-                    TaskTokenEnum::List,
                     TaskTokenEnum::Read,
                     TaskTokenEnum::Create,
                     TaskTokenEnum::Update,

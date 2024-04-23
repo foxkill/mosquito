@@ -4,10 +4,10 @@ namespace Tests\Feature\Api\V1;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
+use Laravel\Sanctum\Sanctum;
 use App\Enums\TaskTokenEnum;
 use App\Models\Task;
 use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class TaskAuthTest extends TestCase
@@ -33,7 +33,7 @@ class TaskAuthTest extends TestCase
             ->getJson(route('tasks.show', $task));
 
         // Assert - that access is denied.
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -56,4 +56,6 @@ class TaskAuthTest extends TestCase
         // Assert - that access is denied.
         $response->assertStatus(Response::HTTP_OK);
     }
+
+    // More tests to come...
 }

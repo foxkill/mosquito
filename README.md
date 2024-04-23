@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/foxkill/sandpiper/assets/7531860/d02e5eb2-dd3f-4ff0-a83e-861f27e4a1b7" width="300" heigh="300" /></p>
+<p align="center"><img src="https://github.com/foxkill/mosquito/assets/7531860/19a06321-8566-4ae9-ae21-6b4e177f1663" width="300" heigh="300" /></p>
 
 ![laravel_mosquito](https://github.com/foxkill/mosquito/assets/7531860/19a06321-8566-4ae9-ae21-6b4e177f1663)
 

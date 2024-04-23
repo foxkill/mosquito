@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><img src="https://github.com/foxkill/sandpiper/assets/7531860/d02e5eb2-dd3f-4ff0-a83e-861f27e4a1b7" width="300" heigh="300" /></p>
 
 
 # Mosquito Task Management API

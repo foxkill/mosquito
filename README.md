@@ -51,9 +51,12 @@ vendor/bin/sail up -d
 vendor/bin/sail artisan migrate
 ```
 
-7. Import the routes in Postman
+9. Import the routes in Postman
+
+You'll find the routes in: 
 
 ```
+{project_root}/public/docs/collection.json
 ```
 
 The API should now be available at `http://localhost`
@@ -212,7 +215,13 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 - sail artisan make:test Api/V1/TaskAuthTest for testing the sanctum abilites.
 - Make a resource to deliver only needed fields: sail artisan make:resource V1/TaskResource
 - sail artisan make:middleware AlwaysAcceptJson
+- create documentation: 
+composer require --dev knuckleswtf/scribe
+sail artisan vendor:publish --tag=scribe-config
+sail artisan scribe:generate
+  
 - TOD0: 
+    * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
     * title=max:255 
     * Better Exception Handling.

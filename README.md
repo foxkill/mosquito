@@ -1,7 +1,5 @@
 <p align="center"><img src="https://github.com/foxkill/mosquito/assets/7531860/19a06321-8566-4ae9-ae21-6b4e177f1663" width="300" heigh="300" /></p>
 
-![laravel_mosquito](https://github.com/foxkill/mosquito/assets/7531860/19a06321-8566-4ae9-ae21-6b4e177f1663)
-
 # Mosquito Task Management API
 
 Mosquito is a lightweight task management API designed to allow users to create, update, delete, and list tasks. It provides a simple and efficient way to manage tasks in a multi-user environment.

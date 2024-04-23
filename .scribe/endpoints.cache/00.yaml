@@ -51,7 +51,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of the resource.'
+      title: 'Display a list of tasks for an user.'
       description: ''
       authenticated: false
       custom: []
@@ -90,7 +90,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created resource in storage.'
+      title: 'Store a newly created task in the backend.'
       description: ''
       authenticated: false
       custom: []
@@ -106,7 +106,7 @@ endpoints:
         name: title
         description: ''
         required: true
-        example: sunt
+        example: ut
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -115,7 +115,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: voluptas
+        example: deleniti
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -133,8 +133,8 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      title: sunt
-      description: voluptas
+      title: ut
+      description: deleniti
       state: done
     fileParameters: []
     responses: []
@@ -153,7 +153,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified resource.'
+      title: 'Display a specific task owned by the current user.'
       description: ''
       authenticated: false
       custom: []
@@ -165,13 +165,13 @@ endpoints:
         name: id
         description: 'The ID of the task.'
         required: true
-        example: 9
+        example: 3
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 9
+      id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -202,7 +202,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified resource in storage.'
+      title: 'Update a specific task for the current user.'
       description: ''
       authenticated: false
       custom: []
@@ -214,13 +214,13 @@ endpoints:
         name: id
         description: 'The ID of the task.'
         required: true
-        example: 20
+        example: 6
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 20
+      id: 6
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -228,7 +228,7 @@ endpoints:
         name: title
         description: ''
         required: true
-        example: sint
+        example: autem
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -237,7 +237,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: nihil
+        example: ratione
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -246,7 +246,7 @@ endpoints:
         name: state
         description: ''
         required: true
-        example: todo
+        example: done
         type: string
         enumValues:
           - todo
@@ -255,9 +255,9 @@ endpoints:
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      title: sint
-      description: nihil
-      state: todo
+      title: autem
+      description: ratione
+      state: done
     fileParameters: []
     responses: []
     responseFields: []
@@ -275,7 +275,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified resource from storage.'
+      title: 'Remove a specified task for the current user.'
       description: ''
       authenticated: false
       custom: []
@@ -287,13 +287,13 @@ endpoints:
         name: id
         description: 'The ID of the task.'
         required: true
-        example: 1
+        example: 7
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 7
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -331,7 +331,7 @@ endpoints:
         name: email
         description: 'Must be a valid email address.'
         required: true
-        example: keebler.kassandra@example.com
+        example: iveum@example.net
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -340,14 +340,14 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: vel
+        example: ducimus
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      email: keebler.kassandra@example.com
-      password: vel
+      email: iveum@example.net
+      password: ducimus
     fileParameters: []
     responses: []
     responseFields: []

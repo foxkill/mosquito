@@ -31,8 +31,8 @@ paths:
       security: []
   /api/v1/tasks:
     get:
-      summary: 'Display a listing of the resource.'
-      operationId: displayAListingOfTheResource
+      summary: 'Display a list of tasks for an user.'
+      operationId: displayAListOfTasksForAnUser
       description: ''
       parameters: []
       responses:
@@ -52,8 +52,8 @@ paths:
         - Endpoints
       security: []
     post:
-      summary: 'Store a newly created resource in storage.'
-      operationId: storeANewlyCreatedResourceInStorage
+      summary: 'Store a newly created task in the backend.'
+      operationId: storeANewlyCreatedTaskInTheBackend
       description: ''
       parameters: []
       responses: {  }
@@ -69,11 +69,11 @@ paths:
                 title:
                   type: string
                   description: ''
-                  example: sunt
+                  example: ut
                 description:
                   type: string
                   description: ''
-                  example: voluptas
+                  example: deleniti
                 state:
                   type: string
                   description: ''
@@ -89,8 +89,8 @@ paths:
       security: []
   '/api/v1/tasks/{id}':
     get:
-      summary: 'Display the specified resource.'
-      operationId: displayTheSpecifiedResource
+      summary: 'Display a specific task owned by the current user.'
+      operationId: displayASpecificTaskOwnedByTheCurrentUser
       description: ''
       parameters: []
       responses:
@@ -110,8 +110,8 @@ paths:
         - Endpoints
       security: []
     put:
-      summary: 'Update the specified resource in storage.'
-      operationId: updateTheSpecifiedResourceInStorage
+      summary: 'Update a specific task for the current user.'
+      operationId: updateASpecificTaskForTheCurrentUser
       description: ''
       parameters: []
       responses: {  }
@@ -127,15 +127,15 @@ paths:
                 title:
                   type: string
                   description: ''
-                  example: sint
+                  example: autem
                 description:
                   type: string
                   description: ''
-                  example: nihil
+                  example: ratione
                 state:
                   type: string
                   description: ''
-                  example: todo
+                  example: done
                   enum:
                     - todo
                     - in_progress
@@ -146,8 +146,8 @@ paths:
                 - state
       security: []
     delete:
-      summary: 'Remove the specified resource from storage.'
-      operationId: removeTheSpecifiedResourceFromStorage
+      summary: 'Remove a specified task for the current user.'
+      operationId: removeASpecifiedTaskForTheCurrentUser
       description: ''
       parameters: []
       responses: {  }
@@ -159,7 +159,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the task.'
-        example: 9
+        example: 3
         required: true
         schema:
           type: integer
@@ -182,11 +182,11 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: keebler.kassandra@example.com
+                  example: iveum@example.net
                 password:
                   type: string
                   description: ''
-                  example: vel
+                  example: ducimus
               required:
                 - email
                 - password

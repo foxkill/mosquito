@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Mosquito",
-        "_postman_id": "fac81eca-999d-4bf8-9f93-64229d049978",
+        "_postman_id": "f4168ab3-8031-4cae-8ea2-4b7c16d3c1d5",
         "description": "Mosquito - A lightweight task api",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -68,7 +68,7 @@
                     ]
                 },
                 {
-                    "name": "Display a listing of the resource.",
+                    "name": "Display a list of tasks for an user.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -116,7 +116,7 @@
                     ]
                 },
                 {
-                    "name": "Store a newly created resource in storage.",
+                    "name": "Store a newly created task in the backend.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -137,7 +137,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"sunt\",\"description\":\"voluptas\",\"state\":\"done\"}"
+                            "raw": "{\"title\":\"ut\",\"description\":\"deleniti\",\"state\":\"done\"}"
                         },
                         "description": "",
                         "auth": {
@@ -147,7 +147,7 @@
                     "response": []
                 },
                 {
-                    "name": "Display the specified resource.",
+                    "name": "Display a specific task owned by the current user.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -158,7 +158,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "3",
                                     "description": "The ID of the task."
                                 }
                             ]
@@ -203,7 +203,7 @@
                     ]
                 },
                 {
-                    "name": "Update the specified resource in storage.",
+                    "name": "Update a specific task for the current user.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -214,7 +214,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "20",
+                                    "value": "6",
                                     "description": "The ID of the task."
                                 }
                             ]
@@ -232,7 +232,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"sint\",\"description\":\"nihil\",\"state\":\"todo\"}"
+                            "raw": "{\"title\":\"autem\",\"description\":\"ratione\",\"state\":\"done\"}"
                         },
                         "description": "",
                         "auth": {
@@ -242,7 +242,7 @@
                     "response": []
                 },
                 {
-                    "name": "Remove the specified resource from storage.",
+                    "name": "Remove a specified task for the current user.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -253,7 +253,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "1",
+                                    "value": "7",
                                     "description": "The ID of the task."
                                 }
                             ]
@@ -299,7 +299,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"keebler.kassandra@example.com\",\"password\":\"vel\"}"
+                            "raw": "{\"email\":\"iveum@example.net\",\"password\":\"ducimus\"}"
                         },
                         "description": "",
                         "auth": {

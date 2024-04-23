@@ -12,7 +12,7 @@ use App\Models\Task;
 class TaskController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a list of tasks for an user.
      */
     public function index()
     {
@@ -20,7 +20,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display a specific task owned by the current user.
      */
     public function show(Task $task)
     {
@@ -28,7 +28,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created task in the backend.
      */
     public function store(StoreTaskRequest $request)
     {
@@ -45,7 +45,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a specific task for the current user.
      */
     public function update(Task $task, StoreTaskRequest $request)
     {
@@ -53,11 +53,12 @@ class TaskController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a specified task for the current user.
      */
     public function destroy(Task $task)
     {
         $task->delete();
+        // Return 204 - No content.
         return response()->noContent(); 
     }
 }

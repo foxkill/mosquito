@@ -5,8 +5,6 @@ namespace Tests\Feature\Api\V1;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
-use Laravel\Sanctum\Sanctum;
-use App\Enums\TaskTokenEnum;
 use Illuminate\Support\Arr;
 use App\Enums\StateEnum;
 use App\Models\Task;
@@ -27,9 +25,11 @@ class TaskTest extends TestCase
     {
         // Arrange.
         $user = User::factory()->create();
-        $task = Task::factory()->create(
-            ['user_id' => $user->id]
-        );
+        $user->tasks()->create([
+            'title' => $this->faker->sentence(),
+            'state' => StateEnum::Todo,
+            'description' => $this->faker->realText(),
+        ]);
 
         // Act - we do not impersonate the user.
         $response = $this->getJson(route('tasks.index'));
@@ -77,7 +77,7 @@ class TaskTest extends TestCase
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertJson([
-                'data' => Arr::only($task->toArray(), ['title', 'state', 'description']) 
+                'data' => Arr::only($task->toArray(), ['title', 'state', 'description'])
             ]);
     }
 
@@ -100,7 +100,7 @@ class TaskTest extends TestCase
 
         // Act.
         $response = $this->actingAs($user)->getJson(route('tasks.index'));
-        
+
         // Assert - repsonse code, data count, id & title match.
         $response
             ->assertStatus(Response::HTTP_OK)
@@ -115,7 +115,7 @@ class TaskTest extends TestCase
     /**
      * It should create a task on behalf of the user.
      */
-    public function test_should_create_a_task(): void 
+    public function test_should_create_a_task(): void
     {
         // Arrange.
         $user = User::factory()->create();
@@ -138,7 +138,7 @@ class TaskTest extends TestCase
     /**
      * It should correctly handle an empty request.
      */
-    public function test_should_not_create_task_from_empty_data(): void 
+    public function test_should_not_create_task_from_empty_data(): void
     {
         // Arrange.
         $user = User::factory()->create();
@@ -154,7 +154,7 @@ class TaskTest extends TestCase
     /**
      * It should reject an invalid input data.
      */
-    public function test_should_not_create_a_task_from_invalid_data(): void 
+    public function test_should_not_create_a_task_from_invalid_data(): void
     {
         // Arrange.
         $user = User::factory()->create();
@@ -165,7 +165,7 @@ class TaskTest extends TestCase
             'description' => $this->faker->word,
             'state' => '<script></script>',
         ]);
-        
+
         // Assert.
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -174,18 +174,16 @@ class TaskTest extends TestCase
     /**
      * It should update a task. 
      */
-    public function test_should_update_a_task(): void 
+    public function test_should_update_a_task(): void
     {
         // Arrange.
         $user = User::factory()->create();
-
-        $task = Task::create([
-            'user_id' => $user->id,
-            'title' => 'The Task', 
+        $task = $user->tasks()->create([
+            'title' => 'The Task',
             'state' => StateEnum::Done,
             'decription' => 'my description',
         ]);
-        
+
         // Act.
         $response = $this->actingAs($user)->putJson(
             route('tasks.update', $task),
@@ -199,10 +197,10 @@ class TaskTest extends TestCase
         // Assert that the response is successful
         $response
             ->assertStatus(Response::HTTP_OK);
-        
+
         // Assert that the data was actually written.
         $this->assertDatabaseHas(
-            'tasks', 
+            'tasks',
             array_merge($expectedData, ['id' => $task->id])
         );
     }
@@ -210,7 +208,7 @@ class TaskTest extends TestCase
     /**
      * It should delete a task. 
      */
-    public function test_should_delete_a_task(): void 
+    public function test_should_delete_a_task(): void
     {
         // Arrange
         $user = User::factory()->create();

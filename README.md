@@ -143,10 +143,10 @@ You will find the routes for the import in postman under:
 ## Priority Tasks:
 
 1. **Avoid using foreign keys in `fillable` methods**:
-   - Remove user_id from fillable array.
+   - ~~Remove user_id from fillable array.~~
 
 2. **Use `$request->validated()` for validated request parameters**:
-   - Replace usages of `$request->safe()->only()` with `$request->validated()` to only retrieve validated request parameters.
+   - ~~Replace usages of `$request->safe()->only()` with `$request->validated()` to only retrieve validated request parameters.~~
 
 3. **Group routes where possible**:
    - Group related routes using Laravel route grouping to improve code organization and readability.
@@ -164,9 +164,6 @@ You will find the routes for the import in postman under:
 
 1. **Remove unused classes from the Use-Statements**:
    - Identify and remove any unused classes from the Use-Statements to declutter the codebase and improve maintainability.
-
-
-
 
 
 ### Notes

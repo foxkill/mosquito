@@ -34,13 +34,15 @@ class TaskController extends Controller
     {
         /** @var \App\Model\User $user */
         $user = auth()->user();
-        
+
         return $user->tasks()->create(
-            $request->safe()->only('title', 'description') +
-            [ 
-                // Make sure the state is set to "todo" when creating a new task.
-                'state' => StateEnum::Todo,
-            ]
+            array_merge(
+                $request->validated(),
+                [
+                    // Make sure the state is set to "todo" when creating a new task.
+                    'state' => StateEnum::Todo,
+                ]
+            )
         );
     }
 
@@ -49,7 +51,8 @@ class TaskController extends Controller
      */
     public function update(Task $task, StoreTaskRequest $request)
     {
-        return $task->update($request->safe()->only('title', 'description', 'state'));
+        // What about sanetizing the input?
+        return $task->update($request->all());
     }
 
     /**
@@ -59,6 +62,6 @@ class TaskController extends Controller
     {
         $task->delete();
         // Return 204 - No content.
-        return response()->noContent(); 
+        return response()->noContent();
     }
 }

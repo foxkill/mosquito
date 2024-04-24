@@ -11,7 +11,7 @@ use App\Models\Scopes\CreatorScope;
 #[ScopedBy([CreatorScope::class])]
 class Task extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -19,10 +19,9 @@ class Task extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        "title",
-        "description",
-        "state",
-        "user_id",
+        'title',
+        'description',
+        'state',
     ];
 
     /**
@@ -30,8 +29,7 @@ class Task extends Model
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-    ];
+    protected $hidden = [];
 
     /**
      * Get the attributes that should be cast.
@@ -52,7 +50,8 @@ class Task extends Model
      * 
      * @return BelongsTo
      */
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

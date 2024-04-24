@@ -138,6 +138,34 @@ You will find the routes for the import in postman under:
 {project_root}/public/docs/collection.json
 ```
 
+# TODO List
+
+## Priority Tasks:
+
+1. **Avoid using foreign keys in `fillable` methods**:
+   - ~~Remove user_id from fillable array.~~
+
+2. **Use `$request->validated()` for validated request parameters**:
+   - ~~Replace usages of `$request->safe()->only()` with `$request->validated()` to only retrieve validated request parameters.~~
+
+3. **Group routes where possible**:
+   - Group related routes using Laravel route grouping to improve code organization and readability.
+
+## Nice-to-have Tasks (Prioritize if time permits):
+
+1. **Consider using Invokeable Controllers**:
+   - Refactor controllers to use Invokeable Controllers where appropriate to further separate concerns and improve code readability.
+
+2. **Move business logic out of controllers**:
+   - Implement Service or Action classes to encapsulate business logic and remove it from controllers to adhere to the "fat model, skinny controller" principle.
+
+
+## Additional Tasks:
+
+1. **Remove unused classes from the Use-Statements**:
+   - Identify and remove any unused classes from the Use-Statements to declutter the codebase and improve maintainability.
+
+
 ### Notes
 
 This would have normally been in my middleware: 

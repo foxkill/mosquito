@@ -55,4 +55,9 @@ class User extends Authenticatable
     public function tasks(): HasMany {
         return $this->hasMany(Task::class);
     }
+
+    // May there will be a project owner later.
+    // public function project(): HasMany {
+    //     return $this->hasMany(Project::class, 'owner_id');
+    // }
 }

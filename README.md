@@ -247,6 +247,10 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 composer require --dev knuckleswtf/scribe
 sail artisan vendor:publish --tag=scribe-config
 sail artisan scribe:generate
+ - sail artisan make:migration add_deadline_to_task_table --table=tasks
+ sail artisan make:migration create_projects_table
+- sail artisan make:controller  Api/V1/ProjectController --invokable
+- sail artisan make:test Api/V1/ProjectTest
   
 - TOD0: 
     * Remove .scripd folder from project add to .gitignore

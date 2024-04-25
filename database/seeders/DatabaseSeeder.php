@@ -2,12 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Seed the application's database.
      */
@@ -37,5 +41,17 @@ class DatabaseSeeder extends Seeder
                 'email' => 'user3@example.com',
                 'password' => 'user3pw'
             ]);
+
+
+        // Generate tasks that are associated with a project.
+        Task::factory(20)
+            ->withProjects()
+            ->withUsers()
+            ->create();
+        
+        // Create projects.
+        // Project::factory(20)
+            // ->hasTasks(10)
+            // ->create();
     }
 }

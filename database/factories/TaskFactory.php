@@ -31,7 +31,9 @@ class TaskFactory extends Factory
         ];
     }
 
-    // Define a state to associate tasks with projects
+    /**
+     * Randomly associate tasks with projects.
+     */
     public function withProjects()
     {
         return $this->afterCreating(function (Task $task) {
@@ -40,6 +42,9 @@ class TaskFactory extends Factory
         });
     }
 
+    /**
+     * Use only existing users to associate to tasks.
+     */
     public function withUsers()
     {
         return $this->afterCreating(function (Task $task) {

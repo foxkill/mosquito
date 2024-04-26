@@ -43,6 +43,9 @@ class DatabaseSeeder extends Seeder
             ]);
 
 
+        // Seed projects.
+        Project::factory(20)->create();
+
         // Generate tasks that are associated with a project.
         Task::factory(20)
             ->withProjects()

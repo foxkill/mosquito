@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1\Projects;
 
+use App\Http\Resources\V1\ProjectResource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Project;
 
 class ProjectIndexController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Handle the incoming index request.
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
-        return Project::all();
+        return ProjectResource::collection(Project::latest()->get());
     }
 }

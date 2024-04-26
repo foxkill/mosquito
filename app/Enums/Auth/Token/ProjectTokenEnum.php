@@ -6,11 +6,11 @@ enum ProjectTokenEnum: string
 {
     public const NAME = 'project-token';
 
-    case List = 'projct-list';
-    case Read = 'projct-read';
-    case Create = 'projct-create';
-    case Update = 'projct-update';
-    case Delete = 'projct-delete';
+    case List = 'project-list';
+    case Read = 'project-read';
+    case Create = 'project-create';
+    case Update = 'project-update';
+    case Delete = 'project-delete';
 
     /**
      * Return a token ablity representation.

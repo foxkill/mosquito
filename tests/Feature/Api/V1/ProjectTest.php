@@ -2,13 +2,15 @@
 
 namespace Tests\Feature\Api\V1;
 
-use App\Enums\Auth\Token\ProjectTokenEnum;
-use App\Models\Project;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Testing\WithFaker;
+use App\Enums\Auth\Token\ProjectTokenEnum;
+use Laravel\Sanctum\Sanctum;
+use Illuminate\Support\Arr;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
 use Tests\TestCase;
 
 class ProjectTest extends TestCase
@@ -53,16 +55,150 @@ class ProjectTest extends TestCase
         $project = Project::factory()->create();
 
         // Act.
+        Sanctum::actingAs(
+            $user,
+            [ProjectTokenEnum::Read->value]
+        );
+
         $response = $this
-            ->actingAs($user)
             ->getJson(route('projects.show', $project));
 
         // Assert
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJson([
-                // 'data' => Arr::only($project->toArray(), ['title'])
-                'data' => 'my title'
+            ->assertExactJson([
+                'data' => Arr::only($project->toArray(), ['id', 'title'])
             ]);
+    }
+
+    /**
+     * The user should be able to read a project.
+     */
+    public function test_should_create_a_project(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        Project::factory()->create();
+
+        // Act.
+        Sanctum::actingAs(
+            $user,
+            [ProjectTokenEnum::Create->value]
+        );
+
+        $response = $this
+            ->postJson(
+                route('projects.store'),
+                [
+                    'title' => $expectedData = $this->faker->sentence(),
+                ]);
+
+        // Assert
+        $response
+            ->assertStatus(Response::HTTP_CREATED);
+
+        // Assert that the data was actually written.
+        $this->assertDatabaseHas(
+            'projects',
+            ['title' => $expectedData]
+        );
+    }
+
+    /**
+     * It should list projects.
+     */
+    public function test_should_list_projects(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        Project::factory(10)->create([
+            'title' => $this->faker->sentence,
+        ]);
+        
+        // Act
+        Sanctum::actingAs($user, [ProjectTokenEnum::List->value]);
+
+        $response = $this->getJson(route('projects.index'));
+
+        // Assert that the response is successful
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJsonCount(
+                10, 
+                'data'
+            );
+    }
+
+
+    /**
+     * It should update a project.
+     */
+    public function test_should_update_a_project(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        $project = Project::create(['title' => $this->faker->sentence]);
+
+        // Act.
+        Sanctum::actingAs($user, [ProjectTokenEnum::Update->value]);
+
+        $response = $this->putJson(
+            route('projects.update', $project),
+            $expectedData = [
+                'title' => $expectedData = 'My new project title',
+            ]
+        );
+
+        // Assert that the response is successful
+        $response
+            ->assertStatus(Response::HTTP_OK);
+
+        // Assert that the data was actually written.
+        $this->assertDatabaseHas(
+            'projects',
+            [
+                'id' => $project->id,
+                'title' => $expectedData
+            ]
+        );
+    }
+
+    /**
+     * It should delete a project.
+     */
+    public function test_should_delete_a_project(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $project = Project::factory()->create([
+            'title' => $this->faker->sentence,
+        ]);
+        
+        $task = Task::factory()->create([
+            'user_id' => $user->id,
+            'project_id' => $project->id,
+        ]);
+
+        // Act
+        Sanctum::actingAs($user, [ProjectTokenEnum::Delete->value]);
+
+        $response = $this->deleteJson(
+            route('projects.destroy', ['project' => $project]
+        ));
+
+        // Assert that the response is successful
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+
+        // Assert that the project was deleted from the database
+        $this->assertDatabaseMissing('projects', ['id' => $task->id]);
+
+        // Assert that the project_id of the task is null.
+        $this->assertDatabaseHas(
+            'tasks',
+            [
+                'id' => $task->id,
+                'project_id' => null,
+            ]
+        );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Projects\ProjectIndexController;
+use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Enums\Auth\Token\ProjectTokenEnum;
 use Illuminate\Auth\Middleware\Authenticate;
@@ -8,6 +9,9 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Enums\TaskTokenEnum;
+use App\Http\Controllers\Api\V1\Projects\ProjectDestroyController;
+use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
+use App\Http\Controllers\Api\V1\Projects\ProjectUpdateController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -44,6 +48,22 @@ Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\A
     Route::get('projects', ProjectIndexController::class)
         ->name('projects.index')
         ->middleware(['auth:sanctum', ProjectTokenEnum::List->toAbility()]);
+
+    Route::get('projects/{project}', ProjectShowController::class)
+        ->name('projects.show')
+        ->middleware(['auth:sanctum', ProjectTokenEnum::Read->toAbility()]);
+
+    Route::post('project', ProjectStoreController::class)
+        ->name('projects.store')
+        ->middleware(['auth:sanctum', ProjectTokenEnum::Create->toAbility()]);
+
+    Route::put('projects/{project}', ProjectUpdateController::class)
+        ->name('projects.update')
+        ->middleware(['auth:sanctum', ProjectTokenEnum::Update->toAbility()]);
+
+    Route::delete('projects/{project}', ProjectDestroyController::class)
+        ->name('projects.destroy')
+        ->middleware(['auth:sanctum', ProjectTokenEnum::Delete->toAbility()]);
 });
 
 Route::post('/login', [AuthController::class, 'login']);

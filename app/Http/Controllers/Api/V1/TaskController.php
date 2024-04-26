@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\V1\StoreTaskRequest;
-use App\Http\Resources\V1\TaskCollection;
 use App\Http\Resources\V1\TaskResource;
 use App\Http\Controllers\Controller;
 use App\Enums\StateEnum;
@@ -24,6 +23,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        // return new TaskResource($task->load('projects'));
         return new TaskResource($task);
     }
 
@@ -52,7 +52,7 @@ class TaskController extends Controller
     public function update(Task $task, StoreTaskRequest $request)
     {
         // What about sanetizing the input?
-        return $task->update($request->all());
+        return $task->update($request->validated());
     }
 
     /**

@@ -9,7 +9,7 @@ namespace App\Enums;
  * \App\Auth\Tokens.
  */
 enum TaskTokenEnum: string {
-    public const NAME = 'access-token';
+    public const NAME = 'task-token';
 
     case List = 'task-list';
     case Read = 'task-read';

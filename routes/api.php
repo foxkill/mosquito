@@ -1,17 +1,17 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Projects\ProjectDestroyController;
+use App\Http\Controllers\Api\V1\Projects\ProjectUpdateController;
 use App\Http\Controllers\Api\V1\Projects\ProjectIndexController;
+use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
 use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
 use App\Http\Controllers\Api\V1\TaskController;
-use App\Enums\Auth\Token\ProjectTokenEnum;
 use Illuminate\Auth\Middleware\Authenticate;
+use App\Enums\Auth\Token\ProjectTokenEnum;
 use App\Http\Controllers\AuthController;
+use App\Enums\Auth\Token\TaskTokenEnum;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\Enums\TaskTokenEnum;
-use App\Http\Controllers\Api\V1\Projects\ProjectDestroyController;
-use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
-use App\Http\Controllers\Api\V1\Projects\ProjectUpdateController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -39,8 +39,8 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
         ->name('tasks.destroy')
         ->middleware(['auth:sanctum',TaskTokenEnum::Delete->toAbility()]);
     
-    // Route::get('tasks/{task}/comments', [TaskCommentsController])
-        // ->name('tasks.destroy')
+    // Route::get('tasks/{task}/projects', [TaskCommentsController])
+        // ->name('tasks.projects')
         // ->middleware(['auth:sanctum',TaskTokenEnum::Delete->toAbility()]);
 });
 

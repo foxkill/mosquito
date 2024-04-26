@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Projects\ProjectUpdateController;
 use App\Http\Controllers\Api\V1\Projects\ProjectIndexController;
 use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
 use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
+use App\Http\Controllers\Api\V1\Tasks\TaskProjectsController;
 use App\Http\Controllers\Api\V1\TaskController;
 use Illuminate\Auth\Middleware\Authenticate;
 use App\Enums\Auth\Token\ProjectTokenEnum;
@@ -37,11 +38,11 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
 
     Route::delete('tasks/{task}', [TaskController::class, 'destroy'])
         ->name('tasks.destroy')
-        ->middleware(['auth:sanctum',TaskTokenEnum::Delete->toAbility()]);
+        ->middleware(['auth:sanctum', TaskTokenEnum::Delete->toAbility()]);
     
-    // Route::get('tasks/{task}/projects', [TaskCommentsController])
-        // ->name('tasks.projects')
-        // ->middleware(['auth:sanctum',TaskTokenEnum::Delete->toAbility()]);
+    Route::get('tasks/{task}/projects', TaskProjectsController::class)
+        ->name('tasks.projects')
+        ->middleware(['auth:sanctum', TaskTokenEnum::ReadProjects->toAbility()]);
 });
 
 Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {

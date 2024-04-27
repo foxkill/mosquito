@@ -254,10 +254,13 @@ sail artisan scribe:generate
 - sail sail artisan make:request V1/StoreProjectRequest
 - sail artisan make:class Api/V1/Actions/{Index, Show, Delete}ProjectAction
 - sail artisan make:controller Api/V1/Projects/ProjectTasksController --invokable
-  sail artisan make:resource V1/ProjectTasksResource
- 
+- sail artisan make:resource V1/ProjectTasksResource
+- sail artisan make:test Api/V1/UserTasksTest
+- sail artisan make:controller Api/V1/Users/UserTasksController --invokable
+-  sail artisan make:resource V1/UserTasksResource
+
 - TOD0: 
-    * Add differenct resource for list method (limit description output)
+    * Add different resource for list method (limit description output)
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
     * validation use title=max:255 (part II of the task).

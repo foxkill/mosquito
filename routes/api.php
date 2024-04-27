@@ -12,6 +12,7 @@ use Illuminate\Auth\Middleware\Authenticate;
 use App\Enums\Auth\Token\ProjectTokenEnum;
 use App\Http\Controllers\AuthController;
 use App\Enums\Auth\Token\TaskTokenEnum;
+use App\Http\Controllers\Api\V1\Users\UserTasksController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -72,9 +73,15 @@ Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\A
         ->middleware(['auth:sanctum', ProjectTokenEnum::ReadProjectTasks->toAbility()]);
 });
 
+// Get tasks for a specfic user.
+Route::group(['prefix' => 'v1/users', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
+    Route::get('users/{user}/tasks', UserTasksController::class)
+        ->name('user.tasks')
+        // TODO: create admin token?!
+        ->middleware(['auth:sanctum']);
+});
+
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/projects/{projectId}/tasks', [TaskController::class, 'tasksForProject']);
-Route::get('/users/{userId}/tasks', [TaskController::class, 'tasksForUser']);
-Route::put('/tasks/{taskId}/deadline', [TaskController::class, 'updateDeadline']);
-Route::get('/tasks/overdue', [TaskController::class, 'overdueTasks']);
+// Route::put('/tasks/{taskId}/deadline', [TaskController::class, 'updateDeadline']);
+// Route::get('/tasks/overdue', [TaskController::class, 'overdueTasks']);

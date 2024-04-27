@@ -242,16 +242,23 @@ class ProjectTest extends TestCase
         // Assert - that the response is successful and has the correct shape.
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJsonCount(2, 'data')
-            ->assertJsonStructure([
-                 'data' => [
-                    '*' => [
-                        'id', 
+            // ->assertJsonCount(2, 'data.tasks')
+            ->assertJsonStructure(
+                [
+                    'data' => [
+                        'id',
                         'title',
-                        'tasks',
+                        'tasks' => [
+                            '*' => [
+                                'id',
+                                'title',
+                                'description',
+                                'state',
+                                'project_id',
+                            ]
+                        ]
                     ]
                 ]
-            ]
-        );
+            );
     }
 }

@@ -45,6 +45,8 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
     Route::get('tasks/{task}/projects', TaskProjectsController::class)
         ->name('tasks.projects')
         ->middleware(['auth:sanctum', TaskTokenEnum::ReadTaskProjects->toAbility()]);
+
+    // Route::put('/tasks/{task}/deadline', [TaskController::class, 'updateDeadline']);
 });
 
 Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
@@ -83,5 +85,4 @@ Route::group(['prefix' => 'v1/users', 'namespace' => '\App\Http\Controllers\Api\
 
 Route::post('/login', [AuthController::class, 'login']);
 
-// Route::put('/tasks/{taskId}/deadline', [TaskController::class, 'updateDeadline']);
 // Route::get('/tasks/overdue', [TaskController::class, 'overdueTasks']);

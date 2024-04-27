@@ -13,8 +13,6 @@ class ProjectTasksController extends Controller
      */
     public function __invoke(Project $project)
     {
-        return ProjectTasksResource::collection(
-            $project->with('tasks')->get()
-        );
+        return new ProjectTasksResource($project);
     }
 }

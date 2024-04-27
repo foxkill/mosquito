@@ -256,6 +256,7 @@ sail artisan scribe:generate
 
   
 - TOD0: 
+    * Add differenct resource for list method (limit description output)
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
     * validation use title=max:255 (part II of the task).

@@ -242,7 +242,7 @@ class ProjectTest extends TestCase
         // Assert - that the response is successful and has the correct shape.
         $response
             ->assertStatus(Response::HTTP_OK)
-            // ->assertJsonCount(2, 'data.tasks')
+            ->assertJsonCount(2, 'data.tasks')
             ->assertJsonStructure(
                 [
                     'data' => [

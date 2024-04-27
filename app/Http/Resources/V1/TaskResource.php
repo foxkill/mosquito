@@ -19,8 +19,10 @@ class TaskResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description ?? '',
             'state' => $this->state,
-            'project_id' => $this->project_id,
-            'project' => ProjectResource::make($this->whenLoaded('project')),
+            'project_id' => $this->project_id ?? 0,
+            'projects' => $this->whenLoaded('project', function () {
+                return ProjectResource::make($this->project);
+            }) ?: [],
         ]; 
     }
 }

@@ -53,10 +53,12 @@ class TaskProjectTest extends TestCase
         Sanctum::actingAs($user, [TaskTokenEnum::ReadProjects->value]);
         $response = $this->getJson(route('tasks.projects', $tasks[0]));
 
-        dump($response->getContent());
         // Assert.
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonCount(8, 'data');
+
+        // TODO: assert that for i. e. Task 8 has Project 3.
+        // TODO assert that Task 3 and 4 have an empty project list and the project_id == 0.
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Auth\Middleware\Authenticate;
 use App\Enums\Auth\Token\ProjectTokenEnum;
 use App\Http\Controllers\AuthController;
 use App\Enums\Auth\Token\TaskTokenEnum;
+use App\Http\Controllers\Api\V1\Tasks\TaskUpdateController;
 use App\Http\Controllers\Api\V1\Users\UserTasksController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -46,7 +47,9 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
         ->name('tasks.projects')
         ->middleware(['auth:sanctum', TaskTokenEnum::ReadTaskProjects->toAbility()]);
 
-    // Route::put('/tasks/{task}/deadline', [TaskController::class, 'updateDeadline']);
+    Route::patch('/tasks/{task}/deadline', TaskUpdateController::class)
+        ->name('tasks.deadline')
+        ->middleware(['auth:sanctum', TaskTokenEnum::Update->toAbility()]);
 });
 
 Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {

@@ -257,9 +257,12 @@ sail artisan scribe:generate
 - sail artisan make:resource V1/ProjectTasksResource
 - sail artisan make:test Api/V1/UserTasksTest
 - sail artisan make:controller Api/V1/Users/UserTasksController --invokable
--  sail artisan make:resource V1/UserTasksResource
+- sail artisan make:resource V1/UserTasksResource
+- sail artisan make:controller Api/V1/Tasks/TaskUpdateController --invokable
+- sail artisan make:request V1/UpdateTaskRequest
 
 - TOD0: 
+    * users/1/tasks handle the authorization stuff.
     * Add different resource for list method (limit description output)
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model

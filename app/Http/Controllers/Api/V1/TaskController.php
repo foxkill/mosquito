@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Requests\V1\UpdateTaskRequest;
 use App\Http\Requests\V1\StoreTaskRequest;
 use App\Http\Resources\V1\TaskResource;
 use App\Http\Controllers\Controller;
@@ -49,7 +50,7 @@ class TaskController extends Controller
     /**
      * Update a specific task for the current user.
      */
-    public function update(Task $task, StoreTaskRequest $request)
+    public function update(Task $task, UpdateTaskRequest $request)
     {
         // What about sanetizing the input?
         return $task->update($request->validated());

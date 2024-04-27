@@ -2,18 +2,19 @@
 
 namespace App\Http\Requests\V1;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 use App\Enums\StateEnum;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
-class StoreTaskRequest extends FormRequest
+class UpdateTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return request()->isMethod('PATCH');
     }
 
     /**
@@ -24,10 +25,15 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|max:255',
-            'description' => ['required'],
-            'state' => ['required', new Enum(StateEnum::class)],
-            'deadline' => 'sometimes|required|date|after:today',
+            'title' => 'sometimes|required|max:255',
+            'description' => 'sometimes|required',
+            'state' => [
+                'sometimes',
+                'required', 
+                Rule::in(StateEnum::InProgess, StateEnum::Done)
+            ],
+            // exam - additional
+            'deadline' => 'required|date|after:today'
         ];
     }
 }

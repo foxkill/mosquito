@@ -91,7 +91,8 @@ class ProjectTest extends TestCase
                 route('projects.store'),
                 [
                     'title' => $expectedData = $this->faker->sentence(),
-                ]);
+                ]
+            );
 
         // Assert
         $response
@@ -114,7 +115,7 @@ class ProjectTest extends TestCase
         Project::factory(10)->create([
             'title' => $this->faker->sentence,
         ]);
-        
+
         // Act
         Sanctum::actingAs($user, [ProjectTokenEnum::List->value]);
 
@@ -124,7 +125,7 @@ class ProjectTest extends TestCase
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonCount(
-                10, 
+                10,
                 'data'
             );
     }
@@ -173,7 +174,7 @@ class ProjectTest extends TestCase
         $project = Project::factory()->create([
             'title' => $this->faker->sentence,
         ]);
-        
+
         $task = Task::factory()->create([
             'user_id' => $user->id,
             'project_id' => $project->id,
@@ -183,8 +184,11 @@ class ProjectTest extends TestCase
         Sanctum::actingAs($user, [ProjectTokenEnum::Delete->value]);
 
         $response = $this->deleteJson(
-            route('projects.destroy', ['project' => $project]
-        ));
+            route(
+                'projects.destroy',
+                ['project' => $project]
+            )
+        );
 
         // Assert that the response is successful
         $response->assertStatus(Response::HTTP_NO_CONTENT);
@@ -198,6 +202,55 @@ class ProjectTest extends TestCase
             [
                 'id' => $task->id,
                 'project_id' => null,
+            ]
+        );
+    }
+
+    /**
+     * It should retrieve tasks of a project.
+     */
+    public function test_should_retrieve_tasks_of_a_project(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $projects = Project::factory(2)->create([
+            'title' => $this->faker->sentence,
+        ]);
+
+        $task = Task::factory(2)->create([
+            'user_id' => $user->id,
+            'project_id' => $projects->first()->id,
+        ]);
+
+        $taskOther = Task::factory(3)->create([
+            'user_id' => $otherUser->id,
+            'project_id' => $projects[1]->id,
+        ]);
+
+        // Act
+        Sanctum::actingAs($user, [ProjectTokenEnum::ReadProjectTasks->value]);
+
+        $response = $this->getJson(
+            route(
+                'projects.tasks',
+                ['project' => $projects->first()]
+            )
+        );
+
+        // Assert - that the response is successful and has the correct shape.
+        $response
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJsonCount(2, 'data')
+            ->assertJsonStructure([
+                 'data' => [
+                    '*' => [
+                        'id', 
+                        'title',
+                        'tasks',
+                    ]
+                ]
             ]
         );
     }

@@ -12,6 +12,8 @@ enum ProjectTokenEnum: string
     case Update = 'project-update';
     case Delete = 'project-delete';
 
+    case ReadProjectTasks = 'project-tasks-read';
+
     /**
      * Return a token ablity representation.
      * 

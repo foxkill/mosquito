@@ -16,7 +16,8 @@ enum TaskTokenEnum: string {
     case Create = 'task-create';
     case Update = 'task-update';
     case Delete = 'task-delete';
-    case ReadProjects = 'task-projects-read';
+
+    case ReadTaskProjects = 'task-projects-read';
 
     /**
      * Return a token ablity representation.

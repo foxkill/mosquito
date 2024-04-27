@@ -50,7 +50,7 @@ class TaskProjectTest extends TestCase
         ]);
 
         // Act.
-        Sanctum::actingAs($user, [TaskTokenEnum::ReadProjects->value]);
+        Sanctum::actingAs($user, [TaskTokenEnum::ReadTaskProjects->value]);
         $response = $this->getJson(route('tasks.projects', $tasks[0]));
 
         // Assert.

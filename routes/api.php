@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Projects\ProjectDestroyController;
 use App\Http\Controllers\Api\V1\Projects\ProjectUpdateController;
 use App\Http\Controllers\Api\V1\Projects\ProjectIndexController;
 use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
+use App\Http\Controllers\Api\V1\Projects\ProjectTasksController;
 use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
 use App\Http\Controllers\Api\V1\Tasks\TaskProjectsController;
 use App\Http\Controllers\Api\V1\TaskController;
@@ -42,7 +43,7 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
     
     Route::get('tasks/{task}/projects', TaskProjectsController::class)
         ->name('tasks.projects')
-        ->middleware(['auth:sanctum', TaskTokenEnum::ReadProjects->toAbility()]);
+        ->middleware(['auth:sanctum', TaskTokenEnum::ReadTaskProjects->toAbility()]);
 });
 
 Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
@@ -65,6 +66,15 @@ Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\A
     Route::delete('projects/{project}', ProjectDestroyController::class)
         ->name('projects.destroy')
         ->middleware(['auth:sanctum', ProjectTokenEnum::Delete->toAbility()]);
+
+    Route::get('projects/{project}/tasks', ProjectTasksController::class)
+        ->name('projects.tasks')
+        ->middleware(['auth:sanctum', ProjectTokenEnum::ReadProjectTasks->toAbility()]);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/projects/{projectId}/tasks', [TaskController::class, 'tasksForProject']);
+Route::get('/users/{userId}/tasks', [TaskController::class, 'tasksForUser']);
+Route::put('/tasks/{taskId}/deadline', [TaskController::class, 'updateDeadline']);
+Route::get('/tasks/overdue', [TaskController::class, 'overdueTasks']);

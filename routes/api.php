@@ -7,13 +7,14 @@ use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
 use App\Http\Controllers\Api\V1\Projects\ProjectTasksController;
 use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
 use App\Http\Controllers\Api\V1\Tasks\TaskProjectsController;
+use App\Http\Controllers\Api\V1\Tasks\TaskOverdueController;
+use App\Http\Controllers\Api\V1\Tasks\TaskUpdateController;
+use App\Http\Controllers\Api\V1\Users\UserTasksController;
 use App\Http\Controllers\Api\V1\TaskController;
 use Illuminate\Auth\Middleware\Authenticate;
 use App\Enums\Auth\Token\ProjectTokenEnum;
 use App\Http\Controllers\AuthController;
 use App\Enums\Auth\Token\TaskTokenEnum;
-use App\Http\Controllers\Api\V1\Tasks\TaskUpdateController;
-use App\Http\Controllers\Api\V1\Users\UserTasksController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -23,6 +24,10 @@ Route::get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
     // Route::apiResource('tasks', TaskController::class)->middleware(['auth:sanctum']);
+    Route::get('tasks/overdue', TaskOverdueController::class)
+        ->name('tasks.overdue')
+        ->middleware(['auth:sanctum', TaskTokenEnum::Read->toAbility()]);
+
     Route::get('tasks', [TaskController::class, 'index'])
         ->name('tasks.index')
         ->middleware(['auth:sanctum', TaskTokenEnum::List->toAbility()]);
@@ -47,9 +52,10 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
         ->name('tasks.projects')
         ->middleware(['auth:sanctum', TaskTokenEnum::ReadTaskProjects->toAbility()]);
 
-    Route::patch('/tasks/{task}/deadline', TaskUpdateController::class)
+    Route::patch('tasks/{task}/deadline', TaskUpdateController::class)
         ->name('tasks.deadline')
         ->middleware(['auth:sanctum', TaskTokenEnum::Update->toAbility()]);
+    
 });
 
 Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {

@@ -3,7 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Rule;
 use App\Enums\StateEnum;
 
 class StoreTaskRequest extends FormRequest
@@ -26,7 +26,8 @@ class StoreTaskRequest extends FormRequest
         return [
             'title' => 'required|max:255',
             'description' => ['required'],
-            'state' => ['required', new Enum(StateEnum::class)],
+            'state' => ['required', Rule::in(StateEnum::Todo->value)],
+            // Must not have a deadline associated.
             'deadline' => 'sometimes|required|date|after:today',
         ];
     }

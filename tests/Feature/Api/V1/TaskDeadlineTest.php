@@ -7,8 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
 use Laravel\Sanctum\Sanctum;
+use App\Enums\StateEnum;
 use App\Models\User;
 use App\Models\Task;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class TaskDeadlineTest extends TestCase
@@ -19,24 +22,111 @@ class TaskDeadlineTest extends TestCase
     use WithFaker;
 
     /**
-     * A basic feature test example.
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        DB::listen(function ($query) {
+            Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
+        });
+    }
+
+
+    /**
+     * It should be able to update the deadline.
      */
     public function test_can_update_the_deadline_of_a_task(): void
     {
         // Arrange.
         $user = User::factory()->create();
 
-        $tasks = Task::factory(2)->create(
-            ['user_id' => $user->id]
+        $task = Task::factory()->create(
+            $expectedData = [
+                'title' => $this->faker->sentence(),
+                'state' => StateEnum::InProgess->value,
+                'description' => $this->faker->sentence(),
+                'user_id' => $user->id,
+            ],
         );
-        
+
+        // Create additional task so we can verify the correct one was updated.
+        $taskOther = Task::factory()->create(['user_id' => $user->id]);
+
+        // $deadline = now()->addDay()->toDateString();
+        $deadline = now()->addDay();
+
         // Act
         Sanctum::actingAs($user, [TaskTokenEnum::Update->value]);
         $response = $this->patchJson(
-            route('tasks.deadline', ['task' => $tasks->first()])
+            route('tasks.deadline', ['task' => $task]),
+            ['deadline' => $deadline]
         );
 
         // Assert
-        $response->assertStatus(Response::HTTP_OK);
+        $response
+            ->assertStatus(Response::HTTP_OK);
+
+        // Assert that the data was actually written.
+        $this->assertDatabaseHas(
+            'tasks',
+            array_merge(
+                $expectedData, 
+                [
+                    'id' => $task->id,
+                    'deadline' => $deadline,
+                ]
+            )
+        );
+    }
+
+    /**
+     * It should be able to update the deadline with normal put request.
+     */
+    public function test_can_not_update_the_deadline_if_method_is_not_patch(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+
+        $task = Task::factory()->create(
+            ['user_id' => $user->id]
+        );
+
+        // Act
+        Sanctum::actingAs($user, [TaskTokenEnum::Update->value]);
+        $response = $this->putJson(
+            route('tasks.deadline', ['task' => $task]),
+            ['deadline' => now()->addDay()]
+        );
+
+        // Assert
+        $response->assertStatus(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * It should be able to reset the deadline
+     */
+    public function test_can_not_reset_the_deadline(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+
+        $task = Task::factory()->create(
+            ['user_id' => $user->id]
+        );
+
+        // Act
+        Sanctum::actingAs($user, [TaskTokenEnum::Update->value]);
+
+        $response = $this->patchJson(
+            route('tasks.deadline', ['task' => $task]),
+            ['deadline' => null]
+        );
+
+        // Assert
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

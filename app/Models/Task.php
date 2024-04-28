@@ -22,7 +22,8 @@ class Task extends Model
         'title',
         'description',
         'state',
-        'project_id',
+        // 'project_id',
+        'deadline',
     ];
 
     /**
@@ -43,7 +44,9 @@ class Task extends Model
         // return [
         //     'state' => AsEnumCollection::of(StateEnum::class),
         // ];
-        return [];
+        return [
+            'deadline' => 'datetime',
+        ];
     }
 
     /**

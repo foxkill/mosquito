@@ -14,7 +14,7 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return request()->isMethod('PATCH');
+        return true;
     }
 
     /**
@@ -30,10 +30,8 @@ class UpdateTaskRequest extends FormRequest
             'state' => [
                 'sometimes',
                 'required', 
-                Rule::in(StateEnum::InProgess, StateEnum::Done)
+                Rule::in(StateEnum::InProgess->value, StateEnum::Done->value)
             ],
-            // exam - additional
-            'deadline' => 'required|date|after:today'
         ];
     }
 }

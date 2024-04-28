@@ -27,7 +27,7 @@ class TaskTest extends TestCase
         $user = User::factory()->create();
         $user->tasks()->create([
             'title' => $this->faker->sentence(),
-            'state' => StateEnum::Todo,
+            'state' => StateEnum::Todo->value,
             'description' => $this->faker->realText(),
         ]);
 
@@ -125,7 +125,7 @@ class TaskTest extends TestCase
             route('tasks.store'),
             [
                 'title' => $this->faker->sentence(),
-                'state' => StateEnum::Todo,
+                'state' => StateEnum::Todo->value,
                 'description' => $this->faker->realText(),
             ]
         );
@@ -180,8 +180,9 @@ class TaskTest extends TestCase
         $user = User::factory()->create();
         $task = $user->tasks()->create([
             'title' => 'The Task',
-            'state' => StateEnum::Done,
+            'state' => StateEnum::Done->value,
             'decription' => 'my description',
+            'deadline' => now()->addDay(),
         ]);
 
         // Act.
@@ -189,10 +190,12 @@ class TaskTest extends TestCase
             route('tasks.update', $task),
             $expectedData = [
                 'title' => $this->faker->sentence(),
-                'state' => StateEnum::InProgess,
+                'state' => StateEnum::InProgess->value,
                 'description' => $this->faker->sentence(),
+                // Deadline must not be resetted. Only in patch request.
+                'deadline' => null,
             ]
-        );
+       );
 
         // Assert that the response is successful
         $response

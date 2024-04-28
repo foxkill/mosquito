@@ -264,7 +264,7 @@ sail artisan scribe:generate
 - sail artisan make:request V1/PatchTaskRequest
 - sail artisan make:test Api/V1/TaskOverdueTest
 - sail artisan make:controller Api/V1/Tasks/TaskOverdueController --invokable
-- sail artisan make:enum Auth/Roles/Role
+- sail artisan make:enum Auth/Roles/Role --int
 
 - TOD0: 
     * users/1/tasks handle the authorization stuff.

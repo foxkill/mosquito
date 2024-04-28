@@ -42,6 +42,14 @@ class DatabaseSeeder extends Seeder
                 'password' => 'user3pw'
             ]);
 
+        // Create an admin user
+        User::factory()->admin()->create(
+            [
+                'name' => 'adminuser',
+                'email' => 'admin@example.com',
+                'password' => 'adm3n',
+            ]
+        );
 
         // Seed projects.
         Project::factory(20)->create();
@@ -51,10 +59,10 @@ class DatabaseSeeder extends Seeder
             ->withProjects()
             ->withUsers()
             ->create();
-        
+
         // Create projects.
         // Project::factory(20)
-            // ->hasTasks(10)
-            // ->create();
+        // ->hasTasks(10)
+        // ->create();
     }
 }

@@ -55,7 +55,6 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
     Route::patch('tasks/{task}/deadline', TaskUpdateController::class)
         ->name('tasks.deadline')
         ->middleware(['auth:sanctum', TaskTokenEnum::Update->toAbility()]);
-    
 });
 
 Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {

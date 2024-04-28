@@ -3,7 +3,6 @@
 namespace Tests\Feature\Api\V1;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
@@ -44,12 +43,10 @@ class TaskOverdueTest extends TestCase
 
         // Act.
         Sanctum::actingAs($user, [TaskTokenEnum::Read->value]);
-        $response = $this->getJson(
-            route('tasks.overdue')
-        );
+        $response = $this->getJson(route('tasks.overdue'));
 
         // Assert - HTTP status, structure, and most overdue task first.
-        $response->assertStatus(Response::HTTP_OK)
+        $response->assertOk()
             ->assertJsonStructure(
                 [
                     'data' => [
@@ -75,8 +72,52 @@ class TaskOverdueTest extends TestCase
     public function test_should_list_overdue_tasks(): void
     {
         // Arrange.
+        $adminUser = User::factory()->admin()->create();
+        $otherUser = User::factory()->create();
+        $user = User::factory()->create();
+
+        // The admin user should not have task.
+        Task::factory(3)->create(
+            ['user_id' => $adminUser->id]
+        )->each(function ($task, $key) {
+            $task->update(['deadline' => now()->subDays($key + 1)]);
+        });
+
+        $tasks = Task::factory(3)->create(
+            ['user_id' => $user->id]
+        )->each(function ($task, $key) {
+            $task->update(['deadline' => now()->subDays($key + 1)]);
+        });
+
+        $taskNotOverdue = Task::factory(2)->create([
+            'user_id' => $user->id,
+            'deadline' => now()->addDays(4),
+        ]);
+
+        $tasksOtherUser = Task::factory(5)->create(
+            ['user_id' => $otherUser->id]
+        )->each(function ($task, $key) {
+            $task->update(['deadline' => now()->subDays($key + 1)]);
+        });
+
+        $taskOtherUerNotOverdue = Task::factory(2)->create([
+            'user_id' => $otherUser->id,
+            'deadline' => now()->addDays(4),
+        ]);
+
         // Act.
+        dump($adminUser->toArray(), $adminUser->isAdmin);
+        Sanctum::actingAs($adminUser, [TaskTokenEnum::Read->value]);
+        $response = $this->getJson(route('tasks.overdue'));
+
+        // dump(
+        //     json_decode(
+        //         $response->getContent()
+        //     )
+        // );
+
         // Assert.
-        $this->assertTrue(false);
+        $response->assertOk()
+            ->assertJsonCount(11, 'data');
     }
 }

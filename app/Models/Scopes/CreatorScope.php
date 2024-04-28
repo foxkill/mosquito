@@ -2,9 +2,11 @@
 
 namespace App\Models\Scopes;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use App\Enums\Auth\Roles\Role;
 
 class CreatorScope implements Scope
 {
@@ -13,8 +15,14 @@ class CreatorScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        // if (auth()->check()) {
-            $builder->where('user_id', auth()->id());
-        // }
+        if (! auth()->check()) {
+            throw new AuthenticationException();
+        }
+
+        if (auth()->user()->role_id == Role::ADMINISTRATOR->value) {
+            return;
+        }
+
+        $builder->where('user_id', auth()->id());
     }
 }

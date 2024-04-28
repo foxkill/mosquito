@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\CreatorScope;
-use InvalidArgumentException;
+use App\Enums\Auth\Roles\Role;
 
 #[ScopedBy([CreatorScope::class])]
 class Task extends Model
@@ -80,5 +80,21 @@ class Task extends Model
     public function scopeOverdue(Builder $query): void
     {
         $query->where('deadline', '<', now());
+    }
+
+    /**
+     * Scope a query to only include overdue tasks.
+     * 
+     * @param Builder $query 
+     * 
+     * @return void 
+     */
+    public function scopeNoAdminTasks(Builder $query): void
+    {
+        if (auth()->user()->role_id != Role::ADMINISTRATOR->value) {
+            return;
+        }
+
+        $query->where('user_id', '!=', auth()->id());
     }
 }

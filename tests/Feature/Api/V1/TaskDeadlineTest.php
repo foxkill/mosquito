@@ -22,21 +22,6 @@ class TaskDeadlineTest extends TestCase
     use WithFaker;
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        DB::listen(function ($query) {
-            Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
-        });
-    }
-
-
-    /**
      * It should be able to update the deadline.
      */
     public function test_can_update_the_deadline_of_a_task(): void

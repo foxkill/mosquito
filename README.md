@@ -264,6 +264,8 @@ sail artisan scribe:generate
 - sail artisan make:request V1/PatchTaskRequest
 - sail artisan make:test Api/V1/TaskOverdueTest
 - sail artisan make:controller Api/V1/Tasks/TaskOverdueController --invokable
+- sail artisan make:enum Auth/Roles/Role
+
 - TOD0: 
     * users/1/tasks handle the authorization stuff.
     * Add different resource for list method (limit description output)

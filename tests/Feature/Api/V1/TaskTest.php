@@ -182,7 +182,7 @@ class TaskTest extends TestCase
             'title' => 'The Task',
             'state' => StateEnum::Done->value,
             'decription' => 'my description',
-            'deadline' => now()->addDay(),
+            'deadline' => $deadline = now()->addDay(),
         ]);
 
         // Act.
@@ -204,7 +204,12 @@ class TaskTest extends TestCase
         // Assert that the data was actually written.
         $this->assertDatabaseHas(
             'tasks',
-            array_merge($expectedData, ['id' => $task->id])
+            array_merge(
+                $expectedData, 
+                [
+                    'id' => $task->id,
+                    'deadline' => $deadline,
+                ])
         );
     }
 

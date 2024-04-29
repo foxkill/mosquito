@@ -17,15 +17,8 @@ class TaskOverdueController extends Controller
     public function __invoke(Request $request)
     {
         // Assume that most overdue tasks are displayed first.
-        return (auth()->user()->role_id == Role::ADMINISTRATOR->value)
-            ? //TaskResource::collection(
-                Task::withoutGlobalScope(CreatorScope::class)
-                    ->noAdminTasks()
-                    ->overdue()
-                    ->orderBy('user_id')
-                    ->latest('deadline')
-                    ->get()
-            //)
-            : TaskResource::collection(Task::latest('deadline')->overdue()->get());
+        return TaskResource::collection(
+            Task::oldest('deadline')->overdue()->get()
+        );
     }
 }

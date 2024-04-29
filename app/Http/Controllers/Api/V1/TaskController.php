@@ -6,6 +6,7 @@ use App\Http\Requests\V1\UpdateTaskRequest;
 use App\Http\Requests\V1\StoreTaskRequest;
 use App\Http\Resources\V1\TaskResource;
 use App\Http\Controllers\Controller;
+use App\Events\TaskUpdating;
 use App\Enums\StateEnum;
 use App\Models\Task;
 

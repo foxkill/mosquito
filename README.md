@@ -265,11 +265,16 @@ sail artisan scribe:generate
 - sail artisan make:test Api/V1/TaskOverdueTest
 - sail artisan make:controller Api/V1/Tasks/TaskOverdueController --invokable
 - sail artisan make:enum Auth/Roles/Role --int
+- sail artisan make:event TaskUpdated
+- sail artisan make:test Api/V1/TaskEventListenerTest
+- sail artisan make:mail DeadlineBreachedEmail
+- sail artisan make:view deadline.expired
 
 - TOD0: 
     * users/1/tasks handle the authorization stuff.
     * Add different resource for list method (limit description output)
     * check if project exists when create and update tasks.
+    * add local scope open() and in this case add index to state.
     * Test perfomance via ab command
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model

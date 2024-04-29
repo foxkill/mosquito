@@ -32,7 +32,7 @@ class UpdateTaskRequest extends FormRequest
                 'required', 
                 Rule::in(StateEnum::InProgess->value, StateEnum::Done->value)
             ],
-            // TODO: check if project exits.
+            // TODO: check if project exists.
             // 'sometimes|exists:project'
         ];
     }

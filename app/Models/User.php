@@ -3,11 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Enums\Auth\Roles\Role;
 
 class User extends Authenticatable
 {
@@ -61,4 +63,14 @@ class User extends Authenticatable
     // public function project(): HasMany {
     //     return $this->hasMany(Project::class, 'owner_id');
     // }
+
+    /**
+     * Helper function to check if user has admin role.
+     * 
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role_id == Role::ADMINISTRATOR->value;
+    }
 }

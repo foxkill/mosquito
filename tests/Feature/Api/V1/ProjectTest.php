@@ -130,7 +130,6 @@ class ProjectTest extends TestCase
             );
     }
 
-
     /**
      * It should update a project.
      */

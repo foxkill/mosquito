@@ -10,8 +10,6 @@ use Laravel\Sanctum\Sanctum;
 use App\Enums\StateEnum;
 use App\Models\User;
 use App\Models\Task;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class TaskDeadlineTest extends TestCase

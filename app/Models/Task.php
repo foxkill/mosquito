@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\CreatorScope;
 use App\Enums\Auth\Roles\Role;
+use App\Events\TaskUpdating;
 
 #[ScopedBy([CreatorScope::class])]
 class Task extends Model
@@ -26,6 +27,16 @@ class Task extends Model
         'state',
         // 'project_id',
         'deadline',
+    ];
+
+    /**
+     * The event map for the model.
+     *
+     * @var array<string, string>
+     */
+    protected $dispatchesEvents = [
+        // 'updating' => TaskUpdated::class,
+        'saving' => TaskUpdating::class,
     ];
 
     /**
@@ -51,6 +62,7 @@ class Task extends Model
         ];
     }
 
+
     /**
      * Define the relationship with the User model.
      * 
@@ -70,7 +82,7 @@ class Task extends Model
     {
         return $this->belongsTo(Project::class);
     }
-    
+
     /**
      * Scope a query to only include overdue tasks.
      * 

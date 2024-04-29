@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Auth\Token\TaskTokenEnum;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Hash;
-use App\Enums\TaskTokenEnum;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -33,6 +33,10 @@ class AuthController extends Controller
                 Response::HTTP_UNAUTHORIZED
             );
         }
+
+        // if ($user->isAdmin()) {
+            // TODO: create another token.
+        // }
 
         return response()->json([
             'access_token' => $user->createToken(

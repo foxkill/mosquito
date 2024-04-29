@@ -62,14 +62,14 @@ class TaskOverdueTest extends TestCase
             )
             ->assertJson(fn(AssertableJson $json) => 
                 $json->has('data', count($tasks))
-                     ->where('data.0.deadline', $tasks[0]->deadline->toJson())
+                     ->where('data.0.deadline', $tasks->last()->deadline->toJson())
             );
     }
 
     /**
      * It should return all overdue messages.
      */
-    public function test_should_list_overdue_tasks(): void
+    public function test_should_list_overdue_tasks_for_an_admin(): void
     {
         // Arrange.
         $adminUser = User::factory()->admin()->create();
@@ -106,15 +106,8 @@ class TaskOverdueTest extends TestCase
         ]);
 
         // Act.
-        dump($adminUser->toArray(), $adminUser->isAdmin);
         Sanctum::actingAs($adminUser, [TaskTokenEnum::Read->value]);
         $response = $this->getJson(route('tasks.overdue'));
-
-        // dump(
-        //     json_decode(
-        //         $response->getContent()
-        //     )
-        // );
 
         // Assert.
         $response->assertOk()

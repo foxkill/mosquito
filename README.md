@@ -91,13 +91,32 @@ Example Response:
 
 Include the access token in the Authorization header of subsequent requests to authenticate yourself.
 
-### Endpoints
+### Task Endpoints
 
 - **GET /api/v1/tasks**: Retrieve all tasks belonging to the authenticated user.
 - **POST /api/v1/tasks**: Create a new task.
 - **GET /api/v1/tasks/{id}**: Retrieve a specific task.
 - **PUT /api/v1/tasks/{id}**: Update a task.
 - **DELETE /api/v1/tasks/{id}**: Delete a task.
+
+### Additional Task Endpoints
+
+- **GET /api/v1/tasks/overdue**: Retrieve all tasks that everdue (admin see all).
+- **GET /api/v1/tasks/{id}/project**: See the project of a task.
+- **PATCH /api/v1/tasks/{task}/deadline**: Update the the deadline of a project (admin can all).
+
+### Project Endpoints
+
+- **POST /api/v1/projects**: Create a new task.
+- **GET /api/v1/projects/{id}**: Show all projects.
+- **POST /api/v1/projects/{id}**: Create a project.
+- **PUT /api/v1/projects/{id}**: Update a project.
+- **DELETE /api/v1/projects/{id}**: Delete a project.
+- **GET /api/v1/projects/{id}/tasks**: Get the tasks associated with a project.
+
+### User Endpoints
+
+- **POST /api/v1/users/{id}/tasks**: Get all tasks for a user (admin all).
 
 ## Testing
 

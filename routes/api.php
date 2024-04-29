@@ -48,8 +48,8 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], 
         ->name('tasks.destroy')
         ->middleware(['auth:sanctum', TaskTokenEnum::Delete->toAbility()]);
     
-    Route::get('tasks/{task}/projects', TaskProjectsController::class)
-        ->name('tasks.projects')
+    Route::get('tasks/{task}/project', TaskProjectsController::class)
+        ->name('tasks.project')
         ->middleware(['auth:sanctum', TaskTokenEnum::ReadTaskProjects->toAbility()]);
 
     Route::patch('tasks/{task}/deadline', TaskUpdateController::class)

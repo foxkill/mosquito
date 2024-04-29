@@ -86,7 +86,7 @@ class TaskDeadlineTest extends TestCase
         );
 
         // Assert
-        $response->assertStatus(Response::HTTP_METHOD_NOT_ALLOWED);
+        $response->assertMethodNotAllowed();
     }
 
     /**

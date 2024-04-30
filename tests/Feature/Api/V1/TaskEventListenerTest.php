@@ -23,9 +23,9 @@ class TaskEventListenerTest extends TestCase
     use WithFaker;
 
     /**
-     * It should check the task updated event listener.
+     * It should check the task updating event listener is invoked.
      */
-    public function test_should_invoke_the_task_updated_event_listener(): void
+    public function test_should_invoke_the_task_updating_event_listener(): void
     {
         // Arrange.
         Event::fake([TaskUpdating::class]);
@@ -33,11 +33,13 @@ class TaskEventListenerTest extends TestCase
         $user = User::factory()->create();
 
         $tasks = Task::withoutEvents(function () use ($user) {
-            return Task::factory(2)->create([
-                'user_id' => $user->id,
-                'state' => StateEnum::Todo->value,
-                'deadline' => now()->subDays(1),
-            ]);
+            return Task::factory(2)
+                ->overdue()
+                ->create([
+                    'user_id' => $user->id,
+                    'state' => StateEnum::Todo->value,
+                ]
+            );
         });
 
         // Act.
@@ -49,11 +51,13 @@ class TaskEventListenerTest extends TestCase
         );
 
         // Assert.
-        $response->assertOk();
+        $response->assertUnprocessable();
 
+        // The user is not an admin user and should not be able
+        // to access overdue tasks.
         $this->assertDatabaseHas('tasks', [
             'id' => $tasks->first()->id,
-            'state' => StateEnum::InProgess->value
+            'state' => StateEnum::Todo->value
         ]);
 
         Event::assertDispatched(TaskUpdating::class);
@@ -86,7 +90,8 @@ class TaskEventListenerTest extends TestCase
             ['state' => StateEnum::InProgess]
         );
 
-
+        $response->assertUnprocessable();
+        
         // Assert
         Mail::assertSent(DeadlineBreachedEmail::class);
     }

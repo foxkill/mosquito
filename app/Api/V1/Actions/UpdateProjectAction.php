@@ -11,10 +11,8 @@ class UpdateProjectAction
      * 
      * @return Project
      */
-    public function execute(Project $project, array $projectData): Project
+    public function execute(Project $project, array $projectData): bool
     {
-        $project->update($projectData);
-
-        return $project;
+        return $project->update($projectData);
     }
 }

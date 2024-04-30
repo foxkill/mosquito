@@ -6,8 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
-use App\Enums\StateEnum;
 use Laravel\Sanctum\Sanctum;
+use App\Enums\StateEnum;
 use App\Models\User;
 use App\Models\Task;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,6 @@ class TaskOverdueTest extends TestCase
         });
     }
 
-
     /**
      * It should return all overdue messages for an user.
      */
@@ -44,20 +43,25 @@ class TaskOverdueTest extends TestCase
         // Arrange.
         $user = User::factory()->create();
 
-        $tasks = Task::factory(3)->create(
-            [
-                'user_id' => $user->id,
-            ]
-        )->each(function ($task, $key) {
-            $task->update(['deadline' => now()->subDays($key + 1)]);
-        });
+        $tasksOverdue = Task::factory(3)
+            ->overdue()
+            ->create(
+                [
+                    'user_id' => $user->id,
+                    'state' => StateEnum::InProgess,
+                ]
+            );
 
-        $taskNotOverdue = Task::factory(2)->create(
-            [
-                'user_id' => $user->id,
-                'deadline' => now()->addDays(4),
-            ]
-        );
+        $tasksNotOverdue = Task::factory(2)
+            ->notOverdue()
+            ->create(
+                [
+                    'user_id' => $user->id,
+                    'state' => StateEnum::InProgess,
+                ]
+            );
+
+        $mostOverdue = $tasksOverdue->min('deadline');
 
         // Act.
         Sanctum::actingAs($user, [TaskTokenEnum::Read->value]);
@@ -80,13 +84,14 @@ class TaskOverdueTest extends TestCase
             )
             ->assertJson(
                 fn (AssertableJson $json) =>
-                $json->has('data', count($tasks))
-                    ->where('data.0.deadline', $tasks->last()->deadline->toJson())
+                $json->has('data', count($tasksOverdue))
+                    ->where('data.0.deadline', $mostOverdue->toJson())
             );
     }
 
     /**
-     * It should return all overdue messages.
+     * It should return all *overdue* tasks for an admin and tasks
+     * from other users where the deadline has expired.
      */
     public function test_should_list_overdue_tasks_for_an_admin(): void
     {
@@ -96,34 +101,47 @@ class TaskOverdueTest extends TestCase
         $user = User::factory()->create();
 
         // The admin user should not have task.
-        Task::factory(3)->create(
-            ['user_id' => $adminUser->id]
-        )->each(function ($task, $key) {
-            $task->update(['deadline' => now()->subDays($key + 1)]);
-        });
+        $taskAdminUserOverdue = Task::factory(1)
+            ->overdue()
+            ->create(
+                ['user_id' => $adminUser->id]
+            );
 
-        // Create overdue tasks.
-        $tasks = Task::factory(3)->create(
-            ['user_id' => $user->id]
-        )->each(function ($task, $key) {
-            $task->update(['deadline' => now()->subDays($key + 1)]);
-        });
+        $taskAdminUserNotOverdue = Task::factory(3)
+            ->notOverdue()
+            ->create(
+                ['user_id' => $adminUser->id]
+            );
 
-        $taskNotOverdue = Task::factory(2)->create([
-            'user_id' => $user->id,
-            'deadline' => now()->addDays(4),
-        ]);
+        // User
+        $tasksUserOverdue = Task::factory(3)
+            ->overdue()
+            ->create(
+                ['user_id' => $user->id]
+            );
 
-        $tasksOtherUser = Task::factory(5)->create(
-            ['user_id' => $otherUser->id]
-        )->each(function ($task, $key) {
-            $task->update(['deadline' => now()->subDays($key + 1)]);
-        });
+        $tasksUserNotOverdue = Task::factory(2)
+            ->notOverdue()
+            ->create(['user_id' => $user->id]);
 
-        $taskOtherUserNotOverdue = Task::factory(2)->create([
-            'user_id' => $otherUser->id,
-            'deadline' => now()->addDays(4),
-        ]);
+        // OtherUser
+        $tasksOtherUser = Task::factory(5)
+            ->create(
+                ['user_id' => $otherUser->id]
+            );
+
+        Task::factory(2)
+            ->notOverdue()
+            ->create(['user_id' => $otherUser->id]);
+
+        $taskOtherUserOverdue = Task::factory(1)
+            ->overdue()
+            ->create(['user_id' => $otherUser->id]);
+
+        $countTasksOverdueAndOwnTasks =
+            count($taskAdminUserOverdue) +
+            count($tasksUserOverdue) +
+            count($taskOtherUserOverdue);
 
         // Act.
         Sanctum::actingAs($adminUser, [TaskTokenEnum::Read->value]);
@@ -131,7 +149,10 @@ class TaskOverdueTest extends TestCase
 
         // Assert.
         $response->assertOk()
-            ->assertJsonCount(11, 'data');
+            ->assertJsonCount(
+                $countTasksOverdueAndOwnTasks,
+                'data'
+            );
     }
 
     /**
@@ -145,31 +166,27 @@ class TaskOverdueTest extends TestCase
         $user = User::factory()->create();
 
         // Create overdue tasks.
-        $tasks = Task::factory(3)->create(
-            [
-                'user_id' => $user->id,
-                'state' => StateEnum::Todo->value,
-            ]
-        )->each(function ($task, $key) {
-            $task->update([
-                'deadline' => now()->subDays($key + 1)
-            ]);
-        });
+        $tasksUserOverdue = Task::factory(3)
+            ->overdue()
+            ->create(
+                [
+                    'user_id' => $user->id,
+                    'state' => StateEnum::InProgess->value,
+                ]
+            );
 
         // Create tasks that are not overdue, but have a deadline.
-        $tasksOtherUser = Task::factory(5)->create(
-            ['user_id' => $otherUser->id]
-        )->each(function ($task, $key) {
-            $task->update(['deadline' => now()->addDays($key + 1)]);
-        });
+        $tasksOtherUserNotOverdue = Task::factory(5)
+            ->notOverdue()
+            ->create(
+                ['user_id' => $otherUser->id]
+            );
 
         // Act.
         Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);
         $response = $this->putJson(
-            route('tasks.update', $tasks[1]),
-            [
-                'state' => StateEnum::InProgess,
-            ]
+            route('tasks.update', $tasksUserOverdue[1]),
+            ['state' => StateEnum::Done]
         );
 
         // Assert.
@@ -178,8 +195,8 @@ class TaskOverdueTest extends TestCase
         $this->assertDatabaseHas(
             'tasks',
             [
-                'id' => $tasks[1]->id,
-                'state' => StateEnum::InProgess->value,
+                'id' => $tasksUserOverdue[1]->id,
+                'state' => StateEnum::Done->value,
             ]
         );
     }
@@ -191,45 +208,43 @@ class TaskOverdueTest extends TestCase
     {
         // Arrange.
         $adminUser = User::factory()->admin()->create();
-        $otherUser = User::factory()->create();
         $user = User::factory()->create();
 
         // Create overdue tasks.
-        $tasks = Task::factory(3)->create(
+        $tasksUserOverdue = Task::factory(3)
+            ->overdue()
+            ->create(
             [
                 'user_id' => $user->id,
-                'state' => StateEnum::Todo->value,
-            ]
-        )->each(function ($task, $key) {
-            $task->update([
-                'deadline' => now()->subDays($key + 1)
-            ]);
-        });
-
-        // Create tasks that are not overdue, but have a deadline.
-        $tasksOtherUser = Task::factory(5)->create(
-            ['user_id' => $otherUser->id]
-        )->each(function ($task, $key) {
-            $task->update(['deadline' => now()->addDays($key + 1)]);
-        });
-
-        // Act.
-        Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);
-        $response = $this->putJson(
-            route('tasks.update', $tasksOtherUser->first()),
-            [
                 'state' => StateEnum::InProgess,
             ]
         );
 
+        // Create tasks that are not overdue, but have a deadline.
+        $tasksUserNotOverdue = Task::factory(5)
+            ->notOverdue()
+            ->create(
+            [
+                'user_id' => $user->id,
+                'state' => StateEnum::InProgess->value,
+            ]
+        );
+
+        // Act.
+        Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);
+        $response = $this->putJson(
+            route('tasks.update', $tasksUserNotOverdue->first()),
+            ['state' => StateEnum::Done->value]
+        );
+
         // Assert.
-        $response->assertUnauthorized();
+        $response->assertForbidden();
 
         $this->assertDatabaseHas(
             'tasks',
             [
-                'id' => $tasksOtherUser->first(),
-                'state' => StateEnum::Todo->value,
+                'id' => $tasksUserNotOverdue->first()->id,
+                'state' => StateEnum::InProgess->value,
             ]
         );
     }

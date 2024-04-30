@@ -35,8 +35,7 @@ class Task extends Model
      * @var array<string, string>
      */
     protected $dispatchesEvents = [
-        // 'updating' => TaskUpdated::class,
-        'saving' => TaskUpdating::class,
+        // 'saving' => TaskUpdating::class,
     ];
 
     /**

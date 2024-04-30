@@ -9,8 +9,8 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use App\Models\Task;
-use App\Models\User;
 
 class TaskUpdating
 {
@@ -21,6 +21,7 @@ class TaskUpdating
      */
     public function __construct(public Task $task)
     {
+        Log::info('im contructed');
         //
     }
 }

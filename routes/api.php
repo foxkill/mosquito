@@ -22,7 +22,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware(Authenticate::using('sanctum'));
 
-Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
+Route::group([
+    'prefix' => 'v1', 
+    'namespace' => '\App\Http\Controllers\Api\V1',
+    'middleware' => ['deadline']
+], function () {
     // Route::apiResource('tasks', TaskController::class)->middleware(['auth:sanctum']);
     Route::get('tasks/overdue', TaskOverdueController::class)
         ->name('tasks.overdue')

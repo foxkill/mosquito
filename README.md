@@ -294,7 +294,8 @@ sail artisan scribe:generate
     * Add different resource for list method (limit description output)
     * check if project exists when create and update tasks.
     * add local scope open() and in this case add index to state.
-    * Test perfomance via ab command
+    * Test performance via ab command
+    * Rename CanEditDeadLines -> CheckTaskUpdateAuthorization
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
     * validation use title=max:255 (part II of the task).

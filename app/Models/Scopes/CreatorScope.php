@@ -21,8 +21,7 @@ class CreatorScope implements Scope
         }
 
         // Dont apply the scope when adminstrator.
-        if (auth()->user()->role_id == Role::ADMINISTRATOR->value) {
-            $builder->where('deadline', '>', now());
+        if (auth()->user()->isAdmin()) {
             return;
         }
         

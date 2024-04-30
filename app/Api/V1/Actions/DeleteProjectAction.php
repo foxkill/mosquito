@@ -11,9 +11,9 @@ class DeleteProjectAction
      * 
      * @return void
      */
-    public function execute(Project $project)
+    public function execute(Project $project): bool|null
     {
         // There could be a massive logic for deleting a project.
-        $project->delete();
+        return $project->delete();
     }
 }

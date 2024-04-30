@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\AlwaysAcceptJson;
+use App\Http\Middleware\CanEditDeadlines;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
+            'deadline' => CanEditDeadlines::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

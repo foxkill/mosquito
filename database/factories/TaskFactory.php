@@ -51,4 +51,28 @@ class TaskFactory extends Factory
             $task->user()->associate(User::inRandomOrder()->first())->save();
         });
     }
+
+    /**
+     * Mark a project as overdue.
+     * 
+     * @return static
+     */
+    public function overdue(): static 
+    {
+        return $this->state(fn (array $attributes) => [
+            'deadline' => now()->subDays(rand(1, 10))
+        ]);
+    }
+
+    /**
+     * Mark a project as not overdue.
+     * 
+     * @return static
+     */
+    public function notOverdue(): static 
+    {
+        return $this->state(fn (array $attributes) => [
+            'deadline' => now()->addDays(rand(1, 10))
+        ]);
+    }
 }

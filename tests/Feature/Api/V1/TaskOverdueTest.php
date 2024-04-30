@@ -10,6 +10,7 @@ use Laravel\Sanctum\Sanctum;
 use App\Enums\StateEnum;
 use App\Models\User;
 use App\Models\Task;
+// TODO: remove
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
@@ -30,6 +31,7 @@ class TaskOverdueTest extends TestCase
     {
         parent::setUp();
 
+        // TODO: remove.
         DB::listen(function ($query) {
             Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
         });

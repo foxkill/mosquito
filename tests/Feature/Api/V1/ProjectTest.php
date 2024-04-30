@@ -195,7 +195,7 @@ class ProjectTest extends TestCase
         // Assert that the project was deleted from the database
         $this->assertDatabaseMissing('projects', ['id' => $task->id]);
 
-        // Assert that the project_id of the task is null.
+        // Assert that the project_id of the task is set null.
         $this->assertDatabaseHas(
             'tasks',
             [

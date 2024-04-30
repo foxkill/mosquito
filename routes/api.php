@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
 use App\Http\Controllers\Api\V1\Tasks\TaskProjectsController;
 use App\Http\Controllers\Api\V1\Tasks\TaskOverdueController;
 use App\Http\Controllers\Api\V1\Tasks\TaskUpdateController;
+use App\Http\Controllers\Api\V1\Tasks\TaskIndexController;
 use App\Http\Controllers\Api\V1\Users\UserTasksController;
 use App\Http\Controllers\Api\V1\TaskController;
 use Illuminate\Auth\Middleware\Authenticate;
@@ -32,7 +33,7 @@ Route::group([
         ->name('tasks.overdue')
         ->middleware(['auth:sanctum', TaskTokenEnum::Read->toAbility()]);
 
-    Route::get('tasks', [TaskController::class, 'index'])
+    Route::get('tasks', TaskIndexController::class)
         ->name('tasks.index')
         ->middleware(['auth:sanctum', TaskTokenEnum::List->toAbility()]);
 
@@ -96,5 +97,3 @@ Route::group(['prefix' => 'v1/users', 'namespace' => '\App\Http\Controllers\Api\
 });
 
 Route::post('/login', [AuthController::class, 'login']);
-
-// Route::get('/tasks/overdue', [TaskController::class, 'overdueTasks']);

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Enums\Auth\Token\TaskTokenEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
@@ -9,6 +10,7 @@ use Illuminate\Support\Arr;
 use App\Enums\StateEnum;
 use App\Models\Task;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -88,26 +90,35 @@ class TaskTest extends TestCase
     {
         // Arrange.
         $user = User::factory()->create();
-        $task = Task::factory()->create(
-            ['user_id' => $user->id]
+        $tasks = Task::factory(10)->create(
+            [
+                'user_id' => $user->id,
+                'description' => $this->faker->realText,
+            ]
         );
 
         $otherUser = User::factory()->create();
 
-        Task::factory()
-            ->count(7)
+        Task::factory(3)
             ->create(['user_id' => $otherUser->id]);
 
         // Act.
-        $response = $this->actingAs($user)->getJson(route('tasks.index'));
+        Sanctum::actingAs($user, [TaskTokenEnum::List->value]);
+        $response = $this->getJson(route('tasks.index'));
+
+        dump(
+            json_decode(
+                $response->getContent()
+            )
+        );
 
         // Assert - repsonse code, data count, id & title match.
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJsonCount(1)
+            ->assertJsonCount(10, 'data')
             ->assertJson([
                 'data' => [
-                    Arr::only($task->toArray(), ['title', 'state', 'description'])
+                    Arr::only($tasks->toArray(), ['title', 'state', 'description'])
                 ]
             ]);
     }

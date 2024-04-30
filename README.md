@@ -288,6 +288,9 @@ sail artisan scribe:generate
 - sail artisan make:test Api/V1/TaskEventListenerTest
 - sail artisan make:mail DeadlineBreachedEmail
 - sail artisan make:view deadline.expired
+Optimization:
+- sail artisan make:resource V1/TaskIndexResource
+- sail artisan make:controller Api/V1/Tasks/TaskIndexController --invokable
 
 - TOD0: 
     * users/1/tasks handle the authorization stuff.

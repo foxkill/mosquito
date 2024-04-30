@@ -13,19 +13,10 @@ use App\Models\Task;
 class TaskController extends Controller
 {
     /**
-     * Display a list of tasks for an user.
-     */
-    public function index()
-    {
-        return TaskResource::collection(Task::latest()->get());
-    }
-
-    /**
      * Display a specific task owned by the current user.
      */
     public function show(Task $task)
     {
-        // return new TaskResource($task->load('projects'));
         return new TaskResource($task);
     }
 

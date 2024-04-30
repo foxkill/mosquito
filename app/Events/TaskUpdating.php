@@ -21,7 +21,6 @@ class TaskUpdating
      */
     public function __construct(public Task $task)
     {
-        Log::info('im contructed');
         //
     }
 }

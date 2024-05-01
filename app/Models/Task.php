@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\CreatorScope;
 use App\Enums\Auth\Roles\Role;
+use App\Enums\StateEnum;
 
 #[ScopedBy([CreatorScope::class])]
 class Task extends Model
@@ -106,5 +107,17 @@ class Task extends Model
         }
 
         $query->where('user_id', '!=', auth()->id());
+    }
+
+    /**
+     * Scope a query to only show open tasks.
+     * 
+     * @param Builder $query 
+     * 
+     * @return void 
+     */
+    public function scopeOpen(Builder $query): void
+    {
+        $query->whereIn('state', [StateEnum::Todo->value, StateEnum::InProgess]);
     }
 }

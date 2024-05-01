@@ -202,6 +202,8 @@ CheckForAnyAbility::class
 
 which were enabled, I did not implement the auth middleware specifically.
 
+### Optimizations
+
 ## Contributors
 
 - Stefan Martin
@@ -291,11 +293,11 @@ sail artisan scribe:generate
 Optimization (create specific index resource to limit the output of description to 50 chars)
 - sail artisan make:resource V1/TaskIndexResource
 - sail artisan make:controller Api/V1/Tasks/TaskIndexController --invokable
+- sail artisan make:migration add_index_for_state_on_tasks --table=tasks (add index on state).
 Final Steps:
 sail artisan make:enum Auth/Token/UserTasksToken
 
 - TOD0: 
-    * validation use title=max:255 (part II of the task).
     * add local scope open() and in this case add index to state.
     * Rename CanEditDeadLines -> CheckTaskUpdateAuthorization
     * Remove .scripd folder from project add to .gitignore

@@ -27,9 +27,8 @@ class StoreTaskRequest extends FormRequest
             'title' => 'required|max:255',
             'description' => ['required'],
             'state' => ['required', Rule::in(StateEnum::Todo->value)],
-            // Must not have a deadline associated.
             'deadline' => 'sometimes|required|date|after:today',
-            // TODO: check if project exits.
+            'project_id' => 'nullable|exists:projects,id',
         ];
     }
 }

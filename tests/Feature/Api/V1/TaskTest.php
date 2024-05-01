@@ -197,14 +197,12 @@ class TaskTest extends TestCase
                 'title' => $this->faker->sentence(),
                 'state' => StateEnum::InProgess->value,
                 'description' => $this->faker->sentence(),
-                // Deadline must not be resetted. Only in patch request.
-                'deadline' => null,
             ]
        );
 
         // Assert that the response is successful
         $response
-            ->assertStatus(Response::HTTP_OK);
+            ->assertOk();
 
         // Assert that the data was actually written.
         $this->assertDatabaseHas(

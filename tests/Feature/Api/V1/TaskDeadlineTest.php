@@ -39,7 +39,6 @@ class TaskDeadlineTest extends TestCase
         // Create additional task so we can verify the correct one was updated.
         $taskOther = Task::factory()->create(['user_id' => $user->id]);
 
-        // $deadline = now()->addDay()->toDateString();
         $deadline = now()->addDay();
 
         // Act
@@ -51,7 +50,7 @@ class TaskDeadlineTest extends TestCase
 
         // Assert
         $response
-            ->assertStatus(Response::HTTP_OK);
+            ->assertOk();
 
         // Assert that the data was actually written.
         $this->assertDatabaseHas(

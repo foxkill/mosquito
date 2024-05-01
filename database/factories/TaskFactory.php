@@ -75,4 +75,16 @@ class TaskFactory extends Factory
             'deadline' => now()->addDays(rand(1, 10))
         ]);
     }
+
+    /**
+     * Mark a project as todo.
+     * 
+     * @return static
+     */
+    public function todo(): static 
+    {
+        return $this->state(fn (array $attributes) => [
+            'state' => StateEnum::Todo->value,
+        ]);
+    }
 }

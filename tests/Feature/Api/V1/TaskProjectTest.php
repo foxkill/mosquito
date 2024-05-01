@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
+use App\Enums\StateEnum;
 use Laravel\Sanctum\Sanctum;
 use App\Models\Project;
 use App\Models\User;
@@ -60,5 +61,129 @@ class TaskProjectTest extends TestCase
 
         // TODO: assert that for i. e. Task 8 has Project 3.
         // TODO assert that Task 3 and 4 have an empty project list and the project_id == 0.
+    }
+
+    /**
+     * It should be a able to assign a project to a task
+     * when creating the task itself.
+     */
+    public function test_assign_project_when_creating_a_task(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+
+        // Act.
+        Sanctum::actingAs($user, [TaskTokenEnum::Create->value]);
+        $response = $this->postJson(
+            route('tasks.store'),
+            $expectedData = [
+                'title' => 'my title',
+                'description' => 'a cool description',
+                'state' => StateEnum::Todo,
+                'deadline' => now()->addDays(10),
+                'project_id' => $project->id,
+            ]
+        );
+
+        // Assert. 
+        $response->assertCreated();
+
+        $this->assertDatabaseHas(
+            'tasks',
+            $expectedData
+        );
+    }
+
+    /**
+     * It should not be a able to assign a project to a task
+     * when creating the task itself.
+     */
+    public function test_assign_non_existing_project_when_creating_a_task(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+
+        // Act.
+        Sanctum::actingAs($user, [TaskTokenEnum::Create->value]);
+        $response = $this->postJson(
+            route('tasks.store'),
+            $expectedData = [
+                'title' => 'my title',
+                'description' => 'a cool description',
+                'state' => StateEnum::Todo,
+                'deadline' => now()->addDays(10),
+                'project_id' => 666
+            ]
+        );
+
+        // Assert. 
+        $response->assertUnprocessable();
+    }
+
+    /**
+     * It should be a able to assign/reassign a project when
+     * updating a task.
+     */
+    public function test_assign_project_when_updating_a_task(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        $projects = Project::factory(2)->create();
+        $tasks = Task::factory(2)
+            ->todo()
+            ->notOverdue()
+            ->for($user)
+            ->create();
+
+        // Act.
+        Sanctum::actingAs($user, [TaskTokenEnum::Update->value]);
+        $response = $this->putJson(
+            route('tasks.update', ['task' => $tasks->first()]),
+            $expectedData = [
+                'title' => 'my title',
+                'description' => 'a cool description',
+                'state' => StateEnum::InProgess->value,
+                'project_id' => $projects->last()->id,
+            ]
+        );
+
+        // Assert. 
+        $response->assertOk();
+
+        $this->assertDatabaseHas(
+            'tasks',
+            $expectedData,
+        );
+    }
+
+    /**
+     * It should not be a able to assign/reassign a project when
+     * updating a task.
+     */
+    public function test_assign_non_existing_project_when_updating_a_task(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        $tasks = Task::factory(2)
+            ->todo()
+            ->notOverdue()
+            ->for($user)
+            ->create();
+
+        // Act.
+        Sanctum::actingAs($user, [TaskTokenEnum::Update->value]);
+        $response = $this->putJson(
+            route('tasks.update', ['task' => $tasks->first()]),
+            $expectedData = [
+                'title' => 'my title',
+                'description' => 'a cool description',
+                'state' => StateEnum::InProgess->value,
+                'project_id' => 666,
+            ]
+        );
+
+        // Assert. 
+        $response->assertUnprocessable();
     }
 }

@@ -31,8 +31,8 @@ class UpdateTaskRequest extends FormRequest
                 'required', 
                 Rule::in(StateEnum::InProgess->value, StateEnum::Done->value)
             ],
-            // TODO: check if project exists.
-            // 'sometimes|exists:project'
+            'project_id' => 'sometimes|exists:projects,id',
+            'deadline' => 'sometimes|required|date|after:today',
         ];
     }
 }

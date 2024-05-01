@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use App\Enums\Auth\Token\ProjectTokenEnum;
 use App\Enums\Auth\Token\TaskTokenEnum;
+use App\Enums\Auth\Token\UserTokenEnum;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\NewAccessToken;
 use Illuminate\Http\Request;
@@ -57,7 +58,11 @@ class AuthController extends Controller
             'admin-token',
             array_map(
                 fn($tokenEnum) => $tokenEnum->value, 
-                array_merge(TaskTokenEnum::cases(), ProjectTokenEnum::cases())
+                array_merge(
+                    TaskTokenEnum::cases(), 
+                    ProjectTokenEnum::cases(),
+                    UserTokenEnum::cases()
+                )
             )
         );
     }

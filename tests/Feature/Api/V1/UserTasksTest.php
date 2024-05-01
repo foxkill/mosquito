@@ -4,7 +4,7 @@ namespace Tests\Feature\Api\V1;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
+use App\Enums\Auth\Token\UserTokenEnum;
 use Laravel\Sanctum\Sanctum;
 use App\Models\Task;
 use App\Models\User;
@@ -20,22 +20,20 @@ class UserTasksTest extends TestCase
     /**
      * It should retrieve tasks for a specific user.
      */
-    public function test_should_retrieve_tasks_of_a_specific_user(): void
+    public function test_should_retrieve_tasks_of_another_user_if_admin(): void
     {
         // Arrange.
-        $user = User::factory()->create();
-
-        $tasks = Task::factory(2)->create([
-            'user_id' => $user->id,
-        ]);
+        $user = User::factory()->admin()->create();
+        Task::factory(2)->for($user)->create();
 
         $otherUser = User::factory()->create();
-        Task::factory(4)->create([
-            'user_id' => $otherUser->id,
-        ]);
+        $tasksOtherUser = Task::factory(4)
+            ->notOverdue()
+            ->for($otherUser)
+            ->create();
 
         // Act.
-        Sanctum::actingAs($user);
+        Sanctum::actingAs($user, [UserTokenEnum::ReadUserTasks->value]);
 
         $response = $this
             ->getJson(
@@ -44,9 +42,36 @@ class UserTasksTest extends TestCase
 
         // Assert.
         $response
-            ->assertStatus(Response::HTTP_OK);
-            // TODO: check that there are 4 task returned.
-            // TODO: implement Middleware and Token as well as rules.
-            //->assertJsonCount(4, 'data.tasks');
+            ->assertOk()
+            ->assertJsonCount(count($tasksOtherUser), 'data.tasks');
+    }
+
+    /**
+     * It should not retrieve tasks for another user when the user
+     * is not an admin user.
+     */
+    public function test_should_not_retrieve_tasks_of_another_user(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        Task::factory(2)->for($user)->create();
+
+        $otherUser = User::factory()->create();
+        $tasksOtherUser = Task::factory(4)
+            ->for($otherUser)
+            ->create();
+
+        // Act.
+        Sanctum::actingAs($user, [UserTokenEnum::ReadUserTasks->value]);
+
+        $response = $this
+            ->getJson(
+                route('user.tasks', ['user' => $otherUser])
+            );
+
+        // Assert.
+        $response
+            ->assertOk()
+            ->assertJsonCount(0, 'data.tasks');
     }
 }

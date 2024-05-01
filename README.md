@@ -288,16 +288,14 @@ sail artisan scribe:generate
 - sail artisan make:test Api/V1/TaskEventListenerTest
 - sail artisan make:mail DeadlineBreachedEmail
 - sail artisan make:view deadline.expired
-Optimization:
+Optimization (create specific index resource to limit the output of description to 50 chars)
 - sail artisan make:resource V1/TaskIndexResource
 - sail artisan make:controller Api/V1/Tasks/TaskIndexController --invokable
+Final Steps:
+sail artisan make:enum Auth/Token/UserTasksToken
 
 - TOD0: 
-    * users/1/tasks handle the authorization stuff.
-    * Add different resource for list method (limit description output)
-    * check if project exists when create and update tasks.
     * add local scope open() and in this case add index to state.
-    * Test performance via ab command
     * Rename CanEditDeadLines -> CheckTaskUpdateAuthorization
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model

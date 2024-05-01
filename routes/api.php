@@ -16,6 +16,7 @@ use Illuminate\Auth\Middleware\Authenticate;
 use App\Enums\Auth\Token\ProjectTokenEnum;
 use App\Http\Controllers\AuthController;
 use App\Enums\Auth\Token\TaskTokenEnum;
+use App\Enums\Auth\Token\UserTokenEnum;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -89,11 +90,15 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', '
 });
 
 // Get tasks for a specfic user.
-Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
+Route::group([
+    'prefix' => 'v1', 
+    'namespace' => '\App\Http\Controllers\Api\V1',
+    'middleware' => ['auth:sanctum']
+], function () {
     Route::get('users/{user}/tasks', UserTasksController::class)
         ->name('user.tasks')
-        // TODO: create admin token?!
-        ->middleware(['auth:sanctum']);
+        ->middleware(UserTokenEnum::ReadUserTasks->toAbility());
 });
 
+// Login facility.
 Route::post('/login', [AuthController::class, 'login']);

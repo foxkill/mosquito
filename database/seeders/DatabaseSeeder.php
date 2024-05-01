@@ -34,22 +34,29 @@ class DatabaseSeeder extends Seeder
                 'password' => 'user2pw'
             ]);
 
-        User::factory()
-            ->hasTasks(2000)
+        $user3 = User::factory()
+            ->hasTasks(500)
             ->create([
                 'name' => 'user3',
                 'email' => 'user3@example.com',
                 'password' => 'user3pw'
             ]);
+        
+        Task::factory(100)->notOverdue()->create(
+            ['user_id' => $user3->id]
+        );
+
+        // We want to have 1400 overdue tasks for perf testing.
+        Task::factory(1400)->overdue()->create(
+            ['user_id' => $user3->id]
+        );
 
         // Create an admin user
-        User::factory()->admin()->create(
-            [
-                'name' => 'adminuser',
-                'email' => 'admin@example.com',
-                'password' => 'adm3n',
-            ]
-        );
+        User::factory()->admin()->create([
+            'name' => 'adminuser',
+            'email' => 'admin@example.com',
+            'password' => 'adm3n',
+        ]);
 
         // Seed projects.
         Project::factory(20)->create();

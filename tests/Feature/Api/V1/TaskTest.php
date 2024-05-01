@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Api\V1;
 
-use App\Enums\Auth\Token\TaskTokenEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Response;
+use App\Enums\Auth\Token\TaskTokenEnum;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Arr;
 use App\Enums\StateEnum;
@@ -15,6 +14,11 @@ use Tests\TestCase;
 
 class TaskTest extends TestCase
 {
+    /**
+     * Maximum number of characters allowed for the title field.
+     */
+    const TITLE_CHARACTER_LIMIT = 255;
+
     // We must use this trait to create tables.
     use RefreshDatabase;
     // To use faker within this test class.
@@ -37,7 +41,7 @@ class TaskTest extends TestCase
         $response = $this->getJson(route('tasks.index'));
 
         // Assert - repsonse code, data count, id & title match.
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertUnauthorized();
     }
 
     /**
@@ -46,8 +50,9 @@ class TaskTest extends TestCase
     public function test_should_not_be_able_to_read_task_of_other_users(): void
     {
         // Arrange.
-        $otherUser = User::factory()->create();
-        $taskOtherUser = Task::factory()->create(['user_id' => $otherUser->id]);
+        $taskOtherUser = Task::factory()
+            ->for(User::factory()->create())
+            ->create();
 
         // Act
         $response = $this
@@ -55,8 +60,7 @@ class TaskTest extends TestCase
             ->getJson(route('tasks.show', $taskOtherUser));
 
         // Assert
-        $response
-            ->assertStatus(Response::HTTP_NOT_FOUND);
+        $response->assertNotFound();
     }
 
     /**
@@ -66,9 +70,9 @@ class TaskTest extends TestCase
     {
         // Arrange.
         $user = User::factory()->create();
-        $task = Task::factory()->create(
-            ['user_id' => $user->id]
-        );
+        $task = Task::factory()
+            ->for($user)
+            ->create();
 
         // Act.
         $response = $this
@@ -77,7 +81,7 @@ class TaskTest extends TestCase
 
         // Assert - repsonse code, data count, title, state, description match.
         $response
-            ->assertStatus(Response::HTTP_OK)
+            ->assertOk()
             ->assertJson([
                 'data' => Arr::only($task->toArray(), ['title', 'state', 'description'])
             ]);
@@ -108,7 +112,7 @@ class TaskTest extends TestCase
 
         // Assert - repsonse code, data count, id & title match.
         $response
-            ->assertStatus(Response::HTTP_OK)
+            ->assertOk()
             ->assertJsonCount(10, 'data')
             ->assertJson([
                 'data' => [
@@ -136,8 +140,7 @@ class TaskTest extends TestCase
         );
 
         // Assert.
-        $response
-            ->assertStatus(Response::HTTP_CREATED);
+        $response->assertCreated();
     }
 
     /**
@@ -152,8 +155,7 @@ class TaskTest extends TestCase
         $response = $this->actingAs($user)->postJson(route('tasks.store'), []);
 
         // Assert.
-        $response
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertUnprocessable();
     }
 
     /**
@@ -172,8 +174,7 @@ class TaskTest extends TestCase
         ]);
 
         // Assert.
-        $response
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertUnprocessable();
     }
 
     /**
@@ -198,22 +199,49 @@ class TaskTest extends TestCase
                 'state' => StateEnum::InProgess->value,
                 'description' => $this->faker->sentence(),
             ]
-       );
+        );
 
         // Assert that the response is successful
-        $response
-            ->assertOk();
+        $response->assertOk();
 
         // Assert that the data was actually written.
         $this->assertDatabaseHas(
             'tasks',
             array_merge(
-                $expectedData, 
+                $expectedData,
                 [
                     'id' => $task->id,
                     'deadline' => $deadline,
-                ])
+                ]
+            )
         );
+    }
+
+    /**
+     * It should not be able to update a task if the max length of the title is 
+     * surpassed.
+     * 
+     * Exam Additional Part.
+     */
+    public function test_should_not_be_able_to_update_a_task_if_surpassing_title_limit(): void
+    {
+        // Arrange.
+        $user = User::factory()->create();
+        $task = Task::factory()->notOverdue()->for($user)->create();
+        $title = $this->faker->sentence(256);
+
+        // Act.
+        $response = $this->actingAs($user)->putJson(
+            route('tasks.update', ['task' => $task]),
+            [
+                'title' => $title,
+                'state' => StateEnum::InProgess->value,
+                'description' => $this->faker->sentence(),
+            ]
+        );
+
+        // Assert.
+        $response->assertUnprocessable();
     }
 
     /**
@@ -234,7 +262,7 @@ class TaskTest extends TestCase
         $response = $this->deleteJson(route('tasks.destroy', ['task' => $task]));
 
         // Assert that the response is successful
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertNoContent();
 
         // Assert that the task was deleted from the database
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);

@@ -295,9 +295,9 @@ Final Steps:
 sail artisan make:enum Auth/Token/UserTasksToken
 
 - TOD0: 
+    * validation use title=max:255 (part II of the task).
     * add local scope open() and in this case add index to state.
     * Rename CanEditDeadLines -> CheckTaskUpdateAuthorization
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
-    * validation use title=max:255 (part II of the task).
     * session.php: 'driver' => env('SESSION_DRIVER', 'redis'),

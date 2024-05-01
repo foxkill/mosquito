@@ -57,7 +57,7 @@ class UserTasksTest extends TestCase
         Task::factory(2)->for($user)->create();
 
         $otherUser = User::factory()->create();
-        $tasksOtherUser = Task::factory(4)
+        Task::factory(4)
             ->for($otherUser)
             ->create();
 

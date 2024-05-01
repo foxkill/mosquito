@@ -3,7 +3,6 @@
 namespace Tests\Feature\Api\V1;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
 use Laravel\Sanctum\Sanctum;
@@ -109,6 +108,6 @@ class TaskDeadlineTest extends TestCase
         );
 
         // Assert
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertUnprocessable();
     }
 }

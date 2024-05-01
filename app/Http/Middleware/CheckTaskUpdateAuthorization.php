@@ -7,7 +7,7 @@ use App\Events\TaskUpdating;
 use Illuminate\Http\Request;
 use Closure;
 
-class CanEditDeadlines
+class CheckTaskUpdateAuthorization
 {
     /**
      * Send this message if deadline has expired.

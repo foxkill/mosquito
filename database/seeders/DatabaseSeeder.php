@@ -67,10 +67,5 @@ class DatabaseSeeder extends Seeder
             ->withProjects()
             ->withUsers()
             ->create();
-
-        // Create projects.
-        // Project::factory(20)
-        // ->hasTasks(10)
-        // ->create();
     }
 }

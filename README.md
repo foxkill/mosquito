@@ -173,10 +173,10 @@ You will find the routes for the import in postman under:
 ## Nice-to-have Tasks (Prioritize if time permits):
 
 1. **Consider using Invokeable Controllers**:
-   - Refactor controllers to use Invokeable Controllers where appropriate to further separate concerns and improve code readability.
+   - ~~Refactor controllers to use Invokeable Controllers where appropriate to further separate concerns and improve code readability.~~
 
 2. **Move business logic out of controllers**:
-   - Implement Service or Action classes to encapsulate business logic and remove it from controllers to adhere to the "fat model, skinny controller" principle.
+   - ~~Implement Service or Action classes to encapsulate business logic and remove it from controllers to adhere to the "fat model, skinny controller" principle.~~
 
 
 ## Additional Tasks:

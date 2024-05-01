@@ -13,7 +13,6 @@ class UserTasksController extends Controller
      */
     public function __invoke(User $user)
     {
-        // return $user->with('tasks')->get();
         return new UserTasksResource($user);
     }
 }

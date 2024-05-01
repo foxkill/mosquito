@@ -62,34 +62,34 @@ Route::group([
         ->middleware(['auth:sanctum', TaskTokenEnum::Update->toAbility()]);
 });
 
-Route::group(['prefix' => 'v1/projects', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
+Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', 'middleware' => 'auth:sanctum'], function () {
     Route::get('projects', ProjectIndexController::class)
         ->name('projects.index')
-        ->middleware(['auth:sanctum', ProjectTokenEnum::List->toAbility()]);
+        ->middleware(ProjectTokenEnum::List->toAbility());
 
     Route::get('projects/{project}', ProjectShowController::class)
         ->name('projects.show')
-        ->middleware(['auth:sanctum', ProjectTokenEnum::Read->toAbility()]);
+        ->middleware(ProjectTokenEnum::Read->toAbility());
 
     Route::post('project', ProjectStoreController::class)
         ->name('projects.store')
-        ->middleware(['auth:sanctum', ProjectTokenEnum::Create->toAbility()]);
+        ->middleware(ProjectTokenEnum::Create->toAbility());
 
     Route::put('projects/{project}', ProjectUpdateController::class)
         ->name('projects.update')
-        ->middleware(['auth:sanctum', ProjectTokenEnum::Update->toAbility()]);
+        ->middleware(ProjectTokenEnum::Update->toAbility());
 
     Route::delete('projects/{project}', ProjectDestroyController::class)
         ->name('projects.destroy')
-        ->middleware(['auth:sanctum', ProjectTokenEnum::Delete->toAbility()]);
+        ->middleware(ProjectTokenEnum::Delete->toAbility());
 
     Route::get('projects/{project}/tasks', ProjectTasksController::class)
         ->name('projects.tasks')
-        ->middleware(['auth:sanctum', ProjectTokenEnum::ReadProjectTasks->toAbility()]);
+        ->middleware(ProjectTokenEnum::ReadProjectTasks->toAbility());
 });
 
 // Get tasks for a specfic user.
-Route::group(['prefix' => 'v1/users', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
+Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1'], function () {
     Route::get('users/{user}/tasks', UserTasksController::class)
         ->name('user.tasks')
         // TODO: create admin token?!

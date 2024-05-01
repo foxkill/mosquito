@@ -42,9 +42,10 @@ class DatabaseSeeder extends Seeder
                 'password' => 'user3pw'
             ]);
         
-        Task::factory(100)->notOverdue()->create(
-            ['user_id' => $user3->id]
-        );
+        Task::factory(100)
+            ->notOverdue()
+            ->for($user3)
+            ->create();
 
         // We want to have 1400 overdue tasks for perf testing.
         Task::factory(1400)->overdue()->create(

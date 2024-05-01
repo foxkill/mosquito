@@ -204,6 +204,59 @@ which were enabled, I did not implement the auth middleware specifically.
 
 ### Optimizations
 
+I added a TaskIndexResource that limits the output related to the Description. After that 
+I created an index to the state field to speed up queries here.
+
+To test the performance on the tasks/overdue route, I recommend the following procedure. The initial profiling
+should be done as follows:
+
+1. Log in with the user who has the most tasks:
+
+```
+curl -X POST \
+   --location 'http://localhost/api/login' \
+   --header 'Content-Type: application/json' \
+   --header 'Accept: application/json' \
+   --data-raw '{"email": "user3@example.com","password":"user3pw"}'
+```
+The reponse on succes will be:
+
+```json
+{
+   "access_token":"2|V26mOaLIDlTJ7sO8AWv31LDBHRiBGX1f...",
+   "token_type":"Bearer"
+}
+```
+
+2. Profiling of the route tasks/overdue:
+
+```bash
+ab -n 100 -c 10 \ 
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Content-Type: application/json' \
+   -H 'Accept: application/json' \
+   -H 'Authorization: Bearer 2|V26mOaLIDlTJ7sO8AWv31LDBHRiBGX1f...' \
+   http://localhost/api/v1/tasks/overdue
+```
+
+3. Store the value of the profiling. After that apply your optimization measures. For example:
+
+```bash
+> sail composer require laravel/octane
+> sail artisan octane:install
+``` 
+
+4. Repeat step 2.
+
+```bash
+ab -n 100 -c 10 \ 
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Content-Type: application/json' \
+   -H 'Accept: application/json' \
+   -H 'Authorization: Bearer 2|V26mOaLIDlTJ7sO8AWv31LDBHRiBGX1f...' \
+   http://localhost/api/v1/tasks/overdue
+```
+
 ## Contributors
 
 - Stefan Martin
@@ -298,7 +351,6 @@ Final Steps:
 sail artisan make:enum Auth/Token/UserTasksToken
 
 - TOD0: 
-    * add local scope open() and in this case add index to state.
     * Rename CanEditDeadLines -> CheckTaskUpdateAuthorization
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model

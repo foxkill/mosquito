@@ -15,7 +15,8 @@ class AuthController extends Controller
     /**
      * Log in an user.
      * 
-     * @param Request $request The given request
+     * @param Request $request The given request.
+     * 
      * @return void 
      */
     public function login(Request $request)
@@ -61,7 +62,7 @@ class AuthController extends Controller
         );
     }
     /**
-     * Create a new token for a user with the role USER 
+     * Create a new token for a user with the role USER.
      * 
      * @return \Laravel\Sanctum\NewAccessToken
      */

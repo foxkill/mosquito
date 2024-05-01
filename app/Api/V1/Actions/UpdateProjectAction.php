@@ -7,7 +7,7 @@ use App\Models\Project;
 class UpdateProjectAction
 {
     /**
-     * Update an existing project
+     * Update an existing project.
      * 
      * @return Project
      */

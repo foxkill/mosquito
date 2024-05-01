@@ -2,11 +2,9 @@
 
 namespace App\Models\Scopes;
 
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use App\Enums\Auth\Roles\Role;
 
 class CreatorScope implements Scope
 {

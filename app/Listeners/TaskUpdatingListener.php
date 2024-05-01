@@ -2,13 +2,9 @@
 
 namespace App\Listeners;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use App\Events\TaskUpdating;
-use App\Mail\DeadlineBreachedEmail;
-use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\DeadlineBreachedEmail;
+use App\Events\TaskUpdating;
 
 class TaskUpdatingListener
 {

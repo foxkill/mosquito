@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Events\TaskUpdating;
-use Closure;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Events\TaskUpdating;
+use Illuminate\Http\Request;
+use Closure;
 
 class CanEditDeadlines
 {

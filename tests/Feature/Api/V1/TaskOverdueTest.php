@@ -23,21 +23,6 @@ class TaskOverdueTest extends TestCase
     use WithFaker;
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // TODO: remove.
-        DB::listen(function ($query) {
-            Log::info($query->sql, ['bindings' => $query->bindings, 'time' => $query->time]);
-        });
-    }
-
-    /**
      * It should return all overdue messages for an user.
      */
     public function test_should_list_overdue_tasks_for_an_user(): void

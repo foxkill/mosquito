@@ -4,9 +4,6 @@ namespace App\Enums\Auth\Token;
 
 /**
  * Implement a token. 
- * 
- * TODO: Move later to a more appropriate location like: 
- * \App\Auth\Tokens.
  */
 enum TaskTokenEnum: string {
     public const NAME = 'task-token';

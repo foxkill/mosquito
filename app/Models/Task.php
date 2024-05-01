@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\CreatorScope;
 use App\Enums\Auth\Roles\Role;
-use App\Events\TaskUpdating;
 
 #[ScopedBy([CreatorScope::class])]
 class Task extends Model

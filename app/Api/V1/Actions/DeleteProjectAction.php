@@ -7,9 +7,9 @@ use App\Models\Project;
 class DeleteProjectAction
 {
     /**
-     * Delete a project
+     * Delete a project.
      * 
-     * @return void
+     * @return bool|null
      */
     public function execute(Project $project): bool|null
     {

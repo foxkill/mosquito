@@ -21,7 +21,7 @@ class TaskIndexResource extends JsonResource
             'description' => Str::limit($this->description, 50, '...'),
             'state' => $this->state,
             'project_id' => $this->project_id ?? 0,
-            'deadline' => $this->deadline,
+            'deadline' => $this->deadline ?? '',
         ];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Requests\V1\UpdateTaskRequest;
 use App\Http\Requests\V1\StoreTaskRequest;
-use App\Http\Resources\V1\TaskCollection;
 use App\Http\Resources\V1\TaskResource;
 use App\Http\Controllers\Controller;
 use App\Enums\StateEnum;
@@ -11,14 +11,6 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a list of tasks for an user.
-     */
-    public function index()
-    {
-        return TaskResource::collection(Task::latest()->get());
-    }
-
     /**
      * Display a specific task owned by the current user.
      */
@@ -49,10 +41,10 @@ class TaskController extends Controller
     /**
      * Update a specific task for the current user.
      */
-    public function update(Task $task, StoreTaskRequest $request)
+    public function update(Task $task, UpdateTaskRequest $request)
     {
         // What about sanetizing the input?
-        return $task->update($request->all());
+        return $task->update($request->validated());
     }
 
     /**

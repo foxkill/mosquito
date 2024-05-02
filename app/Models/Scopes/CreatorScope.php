@@ -13,8 +13,17 @@ class CreatorScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        // if (auth()->check()) {
-            $builder->where('user_id', auth()->id());
-        // }
+        if (! auth()->check()) {
+            // Let the auth layer handle it.
+            return;
+        }
+
+        // Dont apply the scope when adminstrator.
+        if (auth()->user()->isAdmin()) {
+            return;
+        }
+        
+        // Allow only the owner of the task to access it.
+        $builder->where('user_id', auth()->id());
     }
 }

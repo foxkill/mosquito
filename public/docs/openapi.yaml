@@ -29,10 +29,32 @@ paths:
       tags:
         - Endpoints
       security: []
+  /api/v1/tasks/overdue:
+    get:
+      summary: 'Shows all tasks that are overdue.'
+      operationId: showsAllTasksThatAreOverdue
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
   /api/v1/tasks:
     get:
-      summary: 'Display a list of tasks for an user.'
-      operationId: displayAListOfTasksForAnUser
+      summary: 'List all tasks.'
+      operationId: listAllTasks
       description: ''
       parameters: []
       responses:
@@ -68,24 +90,31 @@ paths:
               properties:
                 title:
                   type: string
-                  description: ''
-                  example: ut
+                  description: 'Must not be greater than 255 characters.'
+                  example: ukzsajwyjplogosoupx
                 description:
                   type: string
                   description: ''
-                  example: deleniti
+                  example: ratione
                 state:
                   type: string
                   description: ''
-                  example: done
+                  example: todo
                   enum:
                     - todo
-                    - in_progress
-                    - done
+                deadline:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
+                  example: '2064-09-16'
+                project_id:
+                  type: string
+                  description: ''
+                  example: null
               required:
                 - title
                 - description
                 - state
+                - deadline
       security: []
   '/api/v1/tasks/{id}':
     get:
@@ -126,24 +155,32 @@ paths:
               properties:
                 title:
                   type: string
-                  description: ''
-                  example: autem
+                  description: 'Must not be greater than 255 characters.'
+                  example: btg
                 description:
                   type: string
                   description: ''
-                  example: ratione
+                  example: minima
                 state:
                   type: string
                   description: ''
                   example: done
                   enum:
-                    - todo
                     - in_progress
                     - done
+                project_id:
+                  type: string
+                  description: ''
+                  example: null
+                deadline:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
+                  example: '2094-10-23'
               required:
                 - title
                 - description
                 - state
+                - deadline
       security: []
     delete:
       summary: 'Remove a specified task for the current user.'
@@ -159,7 +196,239 @@ paths:
         in: path
         name: id
         description: 'The ID of the task.'
-        example: 3
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{task_id}/project':
+    get:
+      summary: 'Show projects that are associated with a task.'
+      operationId: showProjectsThatAreAssociatedWithATask
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{task_id}/deadline':
+    patch:
+      summary: 'Update the deadline of a task.'
+      operationId: updateTheDeadlineOfATask
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deadline:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
+                  example: '2061-08-27'
+              required:
+                - deadline
+      security: []
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/projects:
+    get:
+      summary: 'List all projects.'
+      operationId: listAllProjects
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  '/api/v1/projects/{id}':
+    get:
+      summary: 'Show a specific project.'
+      operationId: showASpecificProject
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: 'Update a specific project.'
+      operationId: updateASpecificProject
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: odvseulixkmgjusfklezhigb
+              required:
+                - title
+      security: []
+    delete:
+      summary: 'Remove a project.'
+      operationId: removeAProject
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the project.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/project:
+    post:
+      summary: 'Store a newly created project in the backend.'
+      operationId: storeANewlyCreatedProjectInTheBackend
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: yaya
+              required:
+                - title
+      security: []
+  '/api/v1/projects/{project_id}/tasks':
+    get:
+      summary: 'Show a project with its associacted tasks.'
+      operationId: showAProjectWithItsAssociactedTasks
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: project_id
+        description: 'The ID of the project.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/users/{user_id}/tasks':
+    get:
+      summary: 'Show a user with his associated tasks.'
+      operationId: showAUserWithHisAssociatedTasks
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'The ID of the user.'
+        example: 1
         required: true
         schema:
           type: integer
@@ -182,11 +451,11 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: iveum@example.net
+                  example: oschuppe@example.net
                 password:
                   type: string
                   description: ''
-                  example: ducimus
+                  example: ut
               required:
                 - email
                 - password

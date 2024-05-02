@@ -91,13 +91,32 @@ Example Response:
 
 Include the access token in the Authorization header of subsequent requests to authenticate yourself.
 
-### Endpoints
+### Task Endpoints
 
 - **GET /api/v1/tasks**: Retrieve all tasks belonging to the authenticated user.
 - **POST /api/v1/tasks**: Create a new task.
 - **GET /api/v1/tasks/{id}**: Retrieve a specific task.
 - **PUT /api/v1/tasks/{id}**: Update a task.
 - **DELETE /api/v1/tasks/{id}**: Delete a task.
+
+### Additional Task Endpoints
+
+- **GET /api/v1/tasks/overdue**: Retrieve all tasks that everdue (admin see all).
+- **GET /api/v1/tasks/{id}/project**: See the project of a task.
+- **PATCH /api/v1/tasks/{task}/deadline**: Update the the deadline of a project (admin can all).
+
+### Project Endpoints
+
+- **POST /api/v1/projects**: Create a new task.
+- **GET /api/v1/projects/{id}**: Show all projects.
+- **POST /api/v1/projects/{id}**: Create a project.
+- **PUT /api/v1/projects/{id}**: Update a project.
+- **DELETE /api/v1/projects/{id}**: Delete a project.
+- **GET /api/v1/projects/{id}/tasks**: Get the tasks associated with a project.
+
+### User Endpoints
+
+- **POST /api/v1/users/{id}/tasks**: Get all tasks for a user (admin all).
 
 ## Testing
 
@@ -154,16 +173,16 @@ You will find the routes for the import in postman under:
 ## Nice-to-have Tasks (Prioritize if time permits):
 
 1. **Consider using Invokeable Controllers**:
-   - Refactor controllers to use Invokeable Controllers where appropriate to further separate concerns and improve code readability.
+   - ~~Refactor controllers to use Invokeable Controllers where appropriate to further separate concerns and improve code readability.~~
 
 2. **Move business logic out of controllers**:
-   - Implement Service or Action classes to encapsulate business logic and remove it from controllers to adhere to the "fat model, skinny controller" principle.
+   - ~~Implement Service or Action classes to encapsulate business logic and remove it from controllers to adhere to the "fat model, skinny controller" principle.~~
 
 
 ## Additional Tasks:
 
 1. **Remove unused classes from the Use-Statements**:
-   - Identify and remove any unused classes from the Use-Statements to declutter the codebase and improve maintainability.
+   - ~~Identify and remove any unused classes from the Use-Statements to declutter the codebase and improve maintainability.~~
 
 
 ### Notes
@@ -182,6 +201,61 @@ CheckForAnyAbility::class
 ```
 
 which were enabled, I did not implement the auth middleware specifically.
+
+### Optimizations
+
+I added a TaskIndexResource that limits the output related to the Description. After that 
+I created an index to the state field to speed up queries here.
+
+To test the performance on the tasks/overdue route, I recommend the following procedure. The initial profiling
+should be done as follows:
+
+1. Log in with the user who has the most tasks:
+
+```
+curl -X POST \
+   --location 'http://localhost/api/login' \
+   --header 'Content-Type: application/json' \
+   --header 'Accept: application/json' \
+   --data-raw '{"email": "user3@example.com","password":"user3pw"}'
+```
+The reponse on success will be:
+
+```json
+{
+   "access_token":"2|V26mOaLIDlTJ7sO8AWv31LDBHRiBGX1f...",
+   "token_type":"Bearer"
+}
+```
+
+2. Profiling of the route tasks/overdue:
+
+```bash
+ab -n 100 -c 10 \ 
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Content-Type: application/json' \
+   -H 'Accept: application/json' \
+   -H 'Authorization: Bearer 2|V26mOaLIDlTJ7sO8AWv31LDBHRiBGX1f...' \
+   http://localhost/api/v1/tasks/overdue
+```
+
+3. Store the value of the profiling. After that apply your optimization measures. For example:
+
+```bash
+> sail composer require laravel/octane
+> sail artisan octane:install
+``` 
+
+4. Repeat step 2.
+
+```bash
+ab -n 100 -c 10 \ 
+   -H 'Accept-Encoding: gzip, deflate' \
+   -H 'Content-Type: application/json' \
+   -H 'Accept: application/json' \
+   -H 'Authorization: Bearer 2|V26mOaLIDlTJ7sO8AWv31LDBHRiBGX1f...' \
+   http://localhost/api/v1/tasks/overdue
+```
 
 ## Contributors
 
@@ -247,9 +321,37 @@ Create Table: CREATE TABLE `personal_access_tokens` (
 composer require --dev knuckleswtf/scribe
 sail artisan vendor:publish --tag=scribe-config
 sail artisan scribe:generate
-  
+- sail artisan make:migration add_deadline_to_task_table --table=tasks
+- sail artisan make:migration create_projects_table
+- sail artisan make:controller  Api/V1/Project{Index, Create, Read, Update, Delete}Controller --invokable
+- sail artisan make:test Api/V1/ProjectTest
+- sail sail artisan make:request V1/StoreProjectRequest
+- sail artisan make:class Api/V1/Actions/{Index, Show, Delete}ProjectAction
+- sail artisan make:controller Api/V1/Projects/ProjectTasksController --invokable
+- sail artisan make:resource V1/ProjectTasksResource
+- sail artisan make:test Api/V1/UserTasksTest
+- sail artisan make:controller Api/V1/Users/UserTasksController --invokable
+- sail artisan make:resource V1/UserTasksResource
+- sail artisan make:controller Api/V1/Tasks/TaskUpdateController --invokable
+- sail artisan make:request V1/UpdateTaskRequest
+- sail artisan make:class Api/V1/Actions/UpdateTaskAction
+- sail artisan make:request V1/PatchTaskRequest
+- sail artisan make:test Api/V1/TaskOverdueTest
+- sail artisan make:controller Api/V1/Tasks/TaskOverdueController --invokable
+- sail artisan make:enum Auth/Roles/Role --int
+- sail artisan make:event TaskUpdated
+- sail artisan make:test Api/V1/TaskEventListenerTest
+- sail artisan make:mail DeadlineBreachedEmail
+- sail artisan make:view deadline.expired
+Optimization (create specific index resource to limit the output of description to 50 chars)
+- sail artisan make:resource V1/TaskIndexResource
+- sail artisan make:controller Api/V1/Tasks/TaskIndexController --invokable
+- sail artisan make:migration add_index_for_state_on_tasks --table=tasks (add index on state).
+Final Steps:
+sail artisan make:enum Auth/Token/UserTasksToken
+
 - TOD0: 
+    * Rename CanEditDeadLines -> CheckTaskUpdateAuthorization
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
-    * validation use title=max:255 (part II of the task).
     * session.php: 'driver' => env('SESSION_DRIVER', 'redis'),

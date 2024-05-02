@@ -4,8 +4,8 @@ namespace Tests\Feature\Api\V1;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
+use App\Enums\Auth\Token\TaskTokenEnum;
 use Laravel\Sanctum\Sanctum;
-use App\Enums\TaskTokenEnum;
 use App\Models\Task;
 use App\Models\User;
 use Tests\TestCase;

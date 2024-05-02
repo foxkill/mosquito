@@ -31,8 +31,8 @@ paths:
       security: []
   /api/v1/tasks/overdue:
     get:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Shows all tasks that are overdue.'
+      operationId: showsAllTasksThatAreOverdue
       description: ''
       parameters: []
       responses:
@@ -53,8 +53,8 @@ paths:
       security: []
   /api/v1/tasks:
     get:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'List all tasks.'
+      operationId: listAllTasks
       description: ''
       parameters: []
       responses:
@@ -91,11 +91,11 @@ paths:
                 title:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: ierqvkrilhyfasj
+                  example: ukzsajwyjplogosoupx
                 description:
                   type: string
                   description: ''
-                  example: aliquid
+                  example: ratione
                 state:
                   type: string
                   description: ''
@@ -105,7 +105,7 @@ paths:
                 deadline:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2115-02-27'
+                  example: '2064-09-16'
                 project_id:
                   type: string
                   description: ''
@@ -156,11 +156,11 @@ paths:
                 title:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: vucob
+                  example: btg
                 description:
                   type: string
                   description: ''
-                  example: voluptatem
+                  example: minima
                 state:
                   type: string
                   description: ''
@@ -175,7 +175,7 @@ paths:
                 deadline:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2056-11-15'
+                  example: '2094-10-23'
               required:
                 - title
                 - description
@@ -196,14 +196,14 @@ paths:
         in: path
         name: id
         description: 'The ID of the task.'
-        example: 3
+        example: 1
         required: true
         schema:
           type: integer
   '/api/v1/tasks/{task_id}/project':
     get:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Show projects that are associated with a task.'
+      operationId: showProjectsThatAreAssociatedWithATask
       description: ''
       parameters: []
       responses:
@@ -227,14 +227,14 @@ paths:
         in: path
         name: task_id
         description: 'The ID of the task.'
-        example: 11
+        example: 1
         required: true
         schema:
           type: integer
   '/api/v1/tasks/{task_id}/deadline':
     patch:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Update the deadline of a task.'
+      operationId: updateTheDeadlineOfATask
       description: ''
       parameters: []
       responses: {  }
@@ -250,7 +250,7 @@ paths:
                 deadline:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2120-12-29'
+                  example: '2061-08-27'
               required:
                 - deadline
       security: []
@@ -259,14 +259,14 @@ paths:
         in: path
         name: task_id
         description: 'The ID of the task.'
-        example: 10
+        example: 1
         required: true
         schema:
           type: integer
   /api/v1/projects:
     get:
-      summary: 'Handle the incoming index request.'
-      operationId: handleTheIncomingIndexRequest
+      summary: 'List all projects.'
+      operationId: listAllProjects
       description: ''
       parameters: []
       responses:
@@ -287,8 +287,8 @@ paths:
       security: []
   '/api/v1/projects/{id}':
     get:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Show a specific project.'
+      operationId: showASpecificProject
       description: ''
       parameters: []
       responses:
@@ -308,8 +308,8 @@ paths:
         - Endpoints
       security: []
     put:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Update a specific project.'
+      operationId: updateASpecificProject
       description: ''
       parameters: []
       responses: {  }
@@ -325,13 +325,13 @@ paths:
                 title:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: sbuqtyunta
+                  example: odvseulixkmgjusfklezhigb
               required:
                 - title
       security: []
     delete:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Remove a project.'
+      operationId: removeAProject
       description: ''
       parameters: []
       responses: {  }
@@ -343,14 +343,14 @@ paths:
         in: path
         name: id
         description: 'The ID of the project.'
-        example: 5
+        example: 1
         required: true
         schema:
           type: integer
   /api/v1/project:
     post:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Store a newly created project in the backend.'
+      operationId: storeANewlyCreatedProjectInTheBackend
       description: ''
       parameters: []
       responses: {  }
@@ -366,14 +366,14 @@ paths:
                 title:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: ambjlhaqrcraxicg
+                  example: yaya
               required:
                 - title
       security: []
   '/api/v1/projects/{project_id}/tasks':
     get:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Show a project with its associacted tasks.'
+      operationId: showAProjectWithItsAssociactedTasks
       description: ''
       parameters: []
       responses:
@@ -397,14 +397,14 @@ paths:
         in: path
         name: project_id
         description: 'The ID of the project.'
-        example: 3
+        example: 1
         required: true
         schema:
           type: integer
   '/api/v1/users/{user_id}/tasks':
     get:
-      summary: 'Handle the incoming request.'
-      operationId: handleTheIncomingRequest
+      summary: 'Show a user with his associated tasks.'
+      operationId: showAUserWithHisAssociatedTasks
       description: ''
       parameters: []
       responses:
@@ -428,7 +428,7 @@ paths:
         in: path
         name: user_id
         description: 'The ID of the user.'
-        example: 7
+        example: 1
         required: true
         schema:
           type: integer
@@ -451,11 +451,11 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: yfeil@example.net
+                  example: oschuppe@example.net
                 password:
                   type: string
                   description: ''
-                  example: dolorum
+                  example: ut
               required:
                 - email
                 - password

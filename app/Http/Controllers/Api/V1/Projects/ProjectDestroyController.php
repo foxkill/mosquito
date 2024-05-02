@@ -9,7 +9,7 @@ use App\Models\Project;
 class ProjectDestroyController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Remove a project.
      */
     public function __invoke(Project $project, DeleteProjectAction $action)
     {

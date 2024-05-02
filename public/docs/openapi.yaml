@@ -29,10 +29,32 @@ paths:
       tags:
         - Endpoints
       security: []
+  /api/v1/tasks/overdue:
+    get:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
   /api/v1/tasks:
     get:
-      summary: 'Display a list of tasks for an user.'
-      operationId: displayAListOfTasksForAnUser
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
       description: ''
       parameters: []
       responses:
@@ -68,24 +90,31 @@ paths:
               properties:
                 title:
                   type: string
-                  description: ''
-                  example: ut
+                  description: 'Must not be greater than 255 characters.'
+                  example: ierqvkrilhyfasj
                 description:
                   type: string
                   description: ''
-                  example: deleniti
+                  example: aliquid
                 state:
                   type: string
                   description: ''
-                  example: done
+                  example: todo
                   enum:
                     - todo
-                    - in_progress
-                    - done
+                deadline:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
+                  example: '2115-02-27'
+                project_id:
+                  type: string
+                  description: ''
+                  example: null
               required:
                 - title
                 - description
                 - state
+                - deadline
       security: []
   '/api/v1/tasks/{id}':
     get:
@@ -126,24 +155,32 @@ paths:
               properties:
                 title:
                   type: string
-                  description: ''
-                  example: autem
+                  description: 'Must not be greater than 255 characters.'
+                  example: vucob
                 description:
                   type: string
                   description: ''
-                  example: ratione
+                  example: voluptatem
                 state:
                   type: string
                   description: ''
                   example: done
                   enum:
-                    - todo
                     - in_progress
                     - done
+                project_id:
+                  type: string
+                  description: ''
+                  example: null
+                deadline:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
+                  example: '2056-11-15'
               required:
                 - title
                 - description
                 - state
+                - deadline
       security: []
     delete:
       summary: 'Remove a specified task for the current user.'
@@ -160,6 +197,238 @@ paths:
         name: id
         description: 'The ID of the task.'
         example: 3
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{task_id}/project':
+    get:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 11
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{task_id}/deadline':
+    patch:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deadline:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
+                  example: '2120-12-29'
+              required:
+                - deadline
+      security: []
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 10
+        required: true
+        schema:
+          type: integer
+  /api/v1/projects:
+    get:
+      summary: 'Handle the incoming index request.'
+      operationId: handleTheIncomingIndexRequest
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  '/api/v1/projects/{id}':
+    get:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: sbuqtyunta
+              required:
+                - title
+      security: []
+    delete:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the project.'
+        example: 5
+        required: true
+        schema:
+          type: integer
+  /api/v1/project:
+    post:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: ambjlhaqrcraxicg
+              required:
+                - title
+      security: []
+  '/api/v1/projects/{project_id}/tasks':
+    get:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: project_id
+        description: 'The ID of the project.'
+        example: 3
+        required: true
+        schema:
+          type: integer
+  '/api/v1/users/{user_id}/tasks':
+    get:
+      summary: 'Handle the incoming request.'
+      operationId: handleTheIncomingRequest
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'The ID of the user.'
+        example: 7
         required: true
         schema:
           type: integer
@@ -182,11 +451,11 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: iveum@example.net
+                  example: yfeil@example.net
                 password:
                   type: string
                   description: ''
-                  example: ducimus
+                  example: dolorum
               required:
                 - email
                 - password

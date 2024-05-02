@@ -9,7 +9,7 @@ use App\Models\Project;
 class ProjectTasksController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show a project with its associacted tasks.
      */
     public function __invoke(Project $project)
     {

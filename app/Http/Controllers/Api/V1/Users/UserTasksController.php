@@ -9,7 +9,7 @@ use App\Models\User;
 class UserTasksController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show a user with his associated tasks.
      */
     public function __invoke(User $user)
     {

@@ -10,11 +10,10 @@ use App\Models\Task;
 class TaskUpdateController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Update the deadline of a task.
      */
     public function __invoke(Task $task, PatchTaskRequest $request, UpdateTaskAction $action)
     {
-        $data = $request->validated();
         return $action->execute($task, $request->validated());
     }
 }

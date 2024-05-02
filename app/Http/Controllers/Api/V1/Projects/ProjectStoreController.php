@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class ProjectStoreController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Store a newly created project in the backend.
      */
     public function __invoke(StoreProjectRequest $request, CreateProjectAction $action)
     {

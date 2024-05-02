@@ -10,7 +10,7 @@ use App\Models\Project;
 class ProjectUpdateController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Update a specific project.
      */
     public function __invoke(Project $project, StoreProjectRequest $request, UpdateProjectAction $action)
     {

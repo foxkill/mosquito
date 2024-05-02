@@ -9,7 +9,7 @@ use App\Models\Project;
 class ProjectShowController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show a specific project.
      */
     public function __invoke(Project $project)
     {

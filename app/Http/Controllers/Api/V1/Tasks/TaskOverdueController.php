@@ -10,7 +10,7 @@ use App\Models\Task;
 class TaskOverdueController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Shows all tasks that are overdue.
      */
     public function __invoke(Request $request)
     {

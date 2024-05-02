@@ -219,7 +219,7 @@ curl -X POST \
    --header 'Accept: application/json' \
    --data-raw '{"email": "user3@example.com","password":"user3pw"}'
 ```
-The reponse on succes will be:
+The reponse on success will be:
 
 ```json
 {

@@ -9,7 +9,7 @@ use App\Models\Project;
 class ProjectIndexController extends Controller
 {
     /**
-     * Handle the incoming index request.
+     * List all projects.
      */
     public function __invoke()
     {

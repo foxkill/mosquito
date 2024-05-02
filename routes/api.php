@@ -63,7 +63,12 @@ Route::group([
         ->middleware(['auth:sanctum', TaskTokenEnum::Update->toAbility()]);
 });
 
-Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', 'middleware' => 'auth:sanctum'], function () {
+// The project routes.
+Route::group([
+    'prefix' => 'v1', 
+    'namespace' => '\App\Http\Controllers\Api\V1', 
+    'middleware' => 'auth:sanctum'
+], function () {
     Route::get('projects', ProjectIndexController::class)
         ->name('projects.index')
         ->middleware(ProjectTokenEnum::List->toAbility());

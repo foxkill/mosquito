@@ -9,7 +9,7 @@ use App\Models\Task;
 class TaskIndexController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * List all tasks.
      */
     public function __invoke()
     {

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\V1\UpdateTaskRequest;
-use App\Http\Requests\V1\StoreTaskRequest;
-use App\Http\Resources\V1\TaskResource;
-use App\Http\Controllers\Controller;
 use App\Enums\StateEnum;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreTaskRequest;
+use App\Http\Requests\V1\UpdateTaskRequest;
+use App\Http\Resources\V1\TaskResource;
 use App\Models\Task;
 
 class TaskController extends Controller
@@ -53,6 +53,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
+
         // Return 204 - No content.
         return response()->noContent();
     }

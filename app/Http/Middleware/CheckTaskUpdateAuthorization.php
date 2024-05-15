@@ -2,16 +2,16 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Events\TaskUpdating;
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckTaskUpdateAuthorization
 {
     /**
      * Send this message if deadline has expired.
-     * 
+     *
      * @const
      */
     const DEADLINE_HAS_EXPIRED = 'The deadline of the task has expired';
@@ -19,10 +19,10 @@ class CheckTaskUpdateAuthorization
     /**
      * Send this message if admin tries to access tasks the have
      * no expired deadline.
-     * 
+     *
      * @const
      */
-    const ACCESS_TO_NOT_EXPIRED_DEADLINES_FORBIDDEN = 
+    const ACCESS_TO_NOT_EXPIRED_DEADLINES_FORBIDDEN =
         'You can not access task with deadlines that have not expired.';
 
     /**
@@ -32,13 +32,13 @@ class CheckTaskUpdateAuthorization
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->routeIs('tasks.update')) {
+        if (! $request->routeIs('tasks.update')) {
             return $next($request);
         }
 
         $task = $request->route('task');
 
-        if (!$task) {
+        if (! $task) {
             return $next($request);
         }
 
@@ -47,8 +47,8 @@ class CheckTaskUpdateAuthorization
         $isOwner = $task->user_id == auth()->id();
 
         abort_if(
-            $isAdmin && !$isOverdue, 
-            Response::HTTP_FORBIDDEN, 
+            $isAdmin && ! $isOverdue,
+            Response::HTTP_FORBIDDEN,
             self::ACCESS_TO_NOT_EXPIRED_DEADLINES_FORBIDDEN
         );
 
@@ -56,7 +56,7 @@ class CheckTaskUpdateAuthorization
 
         abort_if(
             $isOverdue && $isOwner,
-            Response::HTTP_UNPROCESSABLE_ENTITY, 
+            Response::HTTP_UNPROCESSABLE_ENTITY,
             self::DEADLINE_HAS_EXPIRED
         );
 

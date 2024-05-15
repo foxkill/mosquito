@@ -1,33 +1,33 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Projects\ProjectDestroyController;
-use App\Http\Controllers\Api\V1\Projects\ProjectUpdateController;
-use App\Http\Controllers\Api\V1\Projects\ProjectIndexController;
-use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
-use App\Http\Controllers\Api\V1\Projects\ProjectTasksController;
-use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
-use App\Http\Controllers\Api\V1\Tasks\TaskProjectsController;
-use App\Http\Controllers\Api\V1\Tasks\TaskOverdueController;
-use App\Http\Controllers\Api\V1\Tasks\TaskUpdateController;
-use App\Http\Controllers\Api\V1\Tasks\TaskIndexController;
-use App\Http\Controllers\Api\V1\Users\UserTasksController;
-use App\Http\Controllers\Api\V1\TaskController;
-use Illuminate\Auth\Middleware\Authenticate;
 use App\Enums\Auth\Token\ProjectTokenEnum;
-use App\Http\Controllers\AuthController;
 use App\Enums\Auth\Token\TaskTokenEnum;
 use App\Enums\Auth\Token\UserTokenEnum;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Projects\ProjectDestroyController;
+use App\Http\Controllers\Api\V1\Projects\ProjectIndexController;
+use App\Http\Controllers\Api\V1\Projects\ProjectShowController;
+use App\Http\Controllers\Api\V1\Projects\ProjectStoreController;
+use App\Http\Controllers\Api\V1\Projects\ProjectTasksController;
+use App\Http\Controllers\Api\V1\Projects\ProjectUpdateController;
+use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\Tasks\TaskIndexController;
+use App\Http\Controllers\Api\V1\Tasks\TaskOverdueController;
+use App\Http\Controllers\Api\V1\Tasks\TaskProjectsController;
+use App\Http\Controllers\Api\V1\Tasks\TaskUpdateController;
+use App\Http\Controllers\Api\V1\Users\UserTasksController;
+use App\Http\Controllers\AuthController;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware(Authenticate::using('sanctum'));
 
 Route::group([
-    'prefix' => 'v1', 
+    'prefix' => 'v1',
     'namespace' => '\App\Http\Controllers\Api\V1',
-    'middleware' => ['deadline']
+    'middleware' => ['deadline'],
 ], function () {
     // Route::apiResource('tasks', TaskController::class)->middleware(['auth:sanctum']);
     Route::get('tasks/overdue', TaskOverdueController::class)
@@ -53,7 +53,7 @@ Route::group([
     Route::delete('tasks/{task}', [TaskController::class, 'destroy'])
         ->name('tasks.destroy')
         ->middleware(['auth:sanctum', TaskTokenEnum::Delete->toAbility()]);
-    
+
     Route::get('tasks/{task}/project', TaskProjectsController::class)
         ->name('tasks.project')
         ->middleware(['auth:sanctum', TaskTokenEnum::ReadTaskProjects->toAbility()]);
@@ -65,9 +65,9 @@ Route::group([
 
 // The project routes.
 Route::group([
-    'prefix' => 'v1', 
-    'namespace' => '\App\Http\Controllers\Api\V1', 
-    'middleware' => 'auth:sanctum'
+    'prefix' => 'v1',
+    'namespace' => '\App\Http\Controllers\Api\V1',
+    'middleware' => 'auth:sanctum',
 ], function () {
     Route::get('projects', ProjectIndexController::class)
         ->name('projects.index')
@@ -96,9 +96,9 @@ Route::group([
 
 // Get tasks for a specfic user.
 Route::group([
-    'prefix' => 'v1', 
+    'prefix' => 'v1',
     'namespace' => '\App\Http\Controllers\Api\V1',
-    'middleware' => ['auth:sanctum']
+    'middleware' => ['auth:sanctum'],
 ], function () {
     Route::get('users/{user}/tasks', UserTasksController::class)
         ->name('user.tasks')

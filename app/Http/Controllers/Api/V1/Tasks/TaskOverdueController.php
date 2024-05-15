@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1\Tasks;
 
-use App\Http\Resources\V1\TaskResource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Resources\V1\TaskResource;
 use App\Models\Task;
+use Illuminate\Http\Request;
 
 class TaskOverdueController extends Controller
 {

@@ -8,10 +8,8 @@ class DeleteProjectAction
 {
     /**
      * Delete a project.
-     * 
-     * @return bool|null
      */
-    public function execute(Project $project): bool|null
+    public function execute(Project $project): ?bool
     {
         // There could be a massive logic for deleting a project.
         return $project->delete();

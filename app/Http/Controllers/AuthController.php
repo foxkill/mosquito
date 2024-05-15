@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Enums\Auth\Token\ProjectTokenEnum;
 use App\Enums\Auth\Token\TaskTokenEnum;
 use App\Enums\Auth\Token\UserTokenEnum;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\NewAccessToken;
-use Illuminate\Http\Request;
-use App\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
     /**
      * Log in an user.
-     * 
-     * @param Request $request The given request.
-     * 
-     * @return void 
+     *
+     * @param  Request  $request  The given request.
+     * @return void
      */
     public function login(Request $request)
     {
@@ -29,14 +28,14 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json(
                 ['message' => 'The provided credentials are incorrect.'],
                 Response::HTTP_UNAUTHORIZED
             );
         }
 
-        $accessToken = ($user->isAdmin()) 
+        $accessToken = ($user->isAdmin())
             ? $this->createAdminToken($user)
             : $this->createUserToken($user);
 
@@ -47,29 +46,26 @@ class AuthController extends Controller
     }
 
     /**
-     * Create a new token for a user with the 
+     * Create a new token for a user with the
      * role ADIMINISTATOR.
-     * 
-     * @return \Laravel\Sanctum\NewAccessToken
      */
     private function createAdminToken($user): NewAccessToken
     {
         return $user->createToken(
             'admin-token',
             array_map(
-                fn($tokenEnum) => $tokenEnum->value, 
+                fn ($tokenEnum) => $tokenEnum->value,
                 array_merge(
-                    TaskTokenEnum::cases(), 
+                    TaskTokenEnum::cases(),
                     ProjectTokenEnum::cases(),
                     UserTokenEnum::cases()
                 )
             )
         );
     }
+
     /**
      * Create a new token for a user with the role USER.
-     * 
-     * @return \Laravel\Sanctum\NewAccessToken
      */
     private function createUserToken($user): NewAccessToken
     {

@@ -8,8 +8,6 @@ class CreateProjectAction
 {
     /**
      * Create a new project
-     * 
-     * @return Project
      */
     public function execute(array $projectData): Project
     {

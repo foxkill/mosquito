@@ -8,7 +8,7 @@ class UpdateProjectAction
 {
     /**
      * Update an existing project.
-     * 
+     *
      * @return Project
      */
     public function execute(Project $project, array $projectData): bool

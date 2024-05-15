@@ -2,20 +2,21 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
-use Laravel\Sanctum\Sanctum;
 use App\Enums\StateEnum;
-use App\Models\User;
 use App\Models\Task;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\Fluent\AssertableJson;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class TaskOverdueTest extends TestCase
 {
     // We must use this trait to create tables.
     use RefreshDatabase;
+
     // To use faker within this test class.
     use WithFaker;
 
@@ -62,13 +63,12 @@ class TaskOverdueTest extends TestCase
                             'state',
                             'project_id',
                             'deadline',
-                        ]
-                    ]
+                        ],
+                    ],
                 ]
             )
             ->assertJson(
-                fn (AssertableJson $json) =>
-                $json->has('data', count($tasksOverdue))
+                fn (AssertableJson $json) => $json->has('data', count($tasksOverdue))
                     ->where('data.0.deadline', $mostOverdue->toJson())
             );
     }
@@ -198,21 +198,21 @@ class TaskOverdueTest extends TestCase
         $tasksUserOverdue = Task::factory(3)
             ->overdue()
             ->create(
-            [
-                'user_id' => $user->id,
-                'state' => StateEnum::InProgess,
-            ]
-        );
+                [
+                    'user_id' => $user->id,
+                    'state' => StateEnum::InProgess,
+                ]
+            );
 
         // Create tasks that are not overdue, but have a deadline.
         $tasksUserNotOverdue = Task::factory(5)
             ->notOverdue()
             ->create(
-            [
-                'user_id' => $user->id,
-                'state' => StateEnum::InProgess->value,
-            ]
-        );
+                [
+                    'user_id' => $user->id,
+                    'state' => StateEnum::InProgess->value,
+                ]
+            );
 
         // Act.
         Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);

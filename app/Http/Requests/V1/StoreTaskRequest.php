@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Enums\StateEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Enums\StateEnum;
 
 class StoreTaskRequest extends FormRequest
 {

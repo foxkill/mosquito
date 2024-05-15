@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1\Projects;
 
-use App\Http\Requests\V1\StoreProjectRequest;
 use App\Api\V1\Actions\UpdateProjectAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreProjectRequest;
 use App\Models\Project;
 
 class ProjectUpdateController extends Controller

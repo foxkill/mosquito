@@ -10,11 +10,9 @@ enum UserTokenEnum: string
 
     /**
      * Return a token ablity representation.
-     * 
-     * @return string 
      */
     public function toAbility(): string
     {
-        return 'ability:' . $this->value;
+        return 'ability:'.$this->value;
     }
 }

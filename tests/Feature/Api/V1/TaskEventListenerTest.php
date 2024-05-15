@@ -2,23 +2,24 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\DeadlineBreachedEmail;
-use Laravel\Sanctum\Sanctum;
-use App\Events\TaskUpdating;
 use App\Enums\StateEnum;
+use App\Events\TaskUpdating;
+use App\Mail\DeadlineBreachedEmail;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class TaskEventListenerTest extends TestCase
 {
     // We must use this trait to create tables.
     use RefreshDatabase;
+
     // To use faker within this test class.
     use WithFaker;
 
@@ -39,7 +40,7 @@ class TaskEventListenerTest extends TestCase
                     'user_id' => $user->id,
                     'state' => StateEnum::Todo->value,
                 ]
-            );
+                );
         });
 
         // Act.
@@ -57,7 +58,7 @@ class TaskEventListenerTest extends TestCase
         // to access overdue tasks.
         $this->assertDatabaseHas('tasks', [
             'id' => $tasks->first()->id,
-            'state' => StateEnum::Todo->value
+            'state' => StateEnum::Todo->value,
         ]);
 
         Event::assertDispatched(TaskUpdating::class);
@@ -91,9 +92,8 @@ class TaskEventListenerTest extends TestCase
         );
 
         $response->assertUnprocessable();
-        
+
         // Assert
         Mail::assertSent(DeadlineBreachedEmail::class);
     }
 }
-

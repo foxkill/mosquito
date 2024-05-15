@@ -3,9 +3,10 @@
 namespace App\Enums\Auth\Token;
 
 /**
- * Implement a token. 
+ * Implement a token.
  */
-enum TaskTokenEnum: string {
+enum TaskTokenEnum: string
+{
     public const NAME = 'task-token';
 
     case List = 'task-list';
@@ -18,11 +19,9 @@ enum TaskTokenEnum: string {
 
     /**
      * Return a token ablity representation.
-     * 
-     * @return string 
      */
     public function toAbility(): string
     {
-        return 'ability:' . $this->value;
+        return 'ability:'.$this->value;
     }
 }

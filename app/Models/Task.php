@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Scopes\CreatorScope;
 use App\Enums\Auth\Roles\Role;
 use App\Enums\StateEnum;
+use App\Models\Scopes\CreatorScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[ScopedBy([CreatorScope::class])]
 class Task extends Model
@@ -61,11 +61,8 @@ class Task extends Model
         ];
     }
 
-
     /**
      * Define the relationship with the User model.
-     * 
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -74,8 +71,6 @@ class Task extends Model
 
     /**
      * Define the relationship with the Project model.
-     * 
-     * @return BelongsTo
      */
     public function project(): BelongsTo
     {
@@ -84,9 +79,6 @@ class Task extends Model
 
     /**
      * Scope a query to only include overdue tasks.
-     * 
-     * @param Builder $query 
-     * @return void 
      */
     public function scopeOverdue(Builder $query): void
     {
@@ -95,10 +87,6 @@ class Task extends Model
 
     /**
      * Scope a query to only include overdue tasks.
-     * 
-     * @param Builder $query 
-     * 
-     * @return void 
      */
     public function scopeNoAdminTasks(Builder $query): void
     {
@@ -111,10 +99,6 @@ class Task extends Model
 
     /**
      * Scope a query to only show open tasks.
-     * 
-     * @param Builder $query 
-     * 
-     * @return void 
      */
     public function scopeOpen(Builder $query): void
     {

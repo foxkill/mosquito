@@ -54,6 +54,7 @@ class TaskOverdueTest extends TestCase
 
         // Assert - HTTP status, structure, and most overdue task first.
         $response->assertOk()
+            ->assertJsonCount(count($tasksOverdue), 'data')
             ->assertJsonStructure(
                 [
                     'data' => [
@@ -100,19 +101,15 @@ class TaskOverdueTest extends TestCase
         // User
         $tasksUserOverdue = Task::factory(3)
             ->overdue()
-            ->create(
-                ['user_id' => $user->id]
-            );
+            ->create(['user_id' => $user->id]);
 
-        $tasksUserNotOverdue = Task::factory(2)
+        Task::factory(2)
             ->notOverdue()
             ->create(['user_id' => $user->id]);
 
         // OtherUser
-        $tasksOtherUser = Task::factory(5)
-            ->create(
-                ['user_id' => $otherUser->id]
-            );
+        Task::factory(5)
+            ->create(['user_id' => $otherUser->id]);
 
         Task::factory(2)
             ->notOverdue()
@@ -170,7 +167,7 @@ class TaskOverdueTest extends TestCase
         Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);
         $response = $this->putJson(
             route('tasks.update', $tasksUserOverdue[1]),
-            ['state' => StateEnum::Done]
+            ['state' => StateEnum::Done->value]
         );
 
         // Assert.
@@ -186,7 +183,112 @@ class TaskOverdueTest extends TestCase
     }
 
     /**
-     * Admin can not update tasks that are not overdue.
+     * Admin can update his own overdue tasks.
+     */
+    public function test_admin_can_update_overdue_tasks_for_himself(): void
+    {
+        // Arrange.
+        $adminUser = User::factory()->admin()->create();
+        $otherUser = User::factory()->create();
+        $user = User::factory()->create();
+
+        // Create overdue tasks.
+        $tasksAdminUserOverdue = Task::factory(3)
+            ->for($adminUser)
+            ->overdue()
+            ->create();
+
+        $tasksUserOverdue = Task::factory(3)
+            ->for($user)
+            ->overdue()
+            ->create(
+                [
+                    'state' => StateEnum::InProgess->value,
+                ]
+            );
+
+        // Create tasks that are not overdue, but have a deadline.
+        $tasksOtherUserOverdue = Task::factory(5)
+            ->for($otherUser)
+            ->overdue()
+            ->create();
+
+        // Act.
+        Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);
+
+        $response = $this->putJson(
+            route('tasks.update', $tasksAdminUserOverdue->first()),
+            ['state' => StateEnum::Done->value]
+        );
+        
+        // Assert.
+        $response->assertOk();
+
+        $this->assertDatabaseHas(
+            'tasks',
+            [
+                'id' => $tasksAdminUserOverdue->first()->id,
+                'state' => StateEnum::Done->value,
+            ]
+        );
+    }
+
+    /**
+     * Admin can update his own not overdue tasks.
+     */
+    public function test_admin_can_update_not_overdue_tasks_for_himself(): void
+    {
+        // Arrange.
+        $adminUser = User::factory()->admin()->create();
+        $otherUser = User::factory()->create();
+        $user = User::factory()->create();
+
+        // Create overdue tasks.
+        $tasksAdminUserNotOverdue = Task::factory(3)
+            ->for($adminUser)
+            ->notOverdue()
+            ->create(
+                ['state' => StateEnum::InProgess->value]
+            );
+
+        $tasksUserOverdue = Task::factory(3)
+            ->for($user)
+            ->overdue()
+            ->create(
+                [
+                    'state' => StateEnum::InProgess->value,
+                ]
+            );
+
+        // Create tasks that are not overdue, but have a deadline.
+        $tasksOtherUserOverdue = Task::factory(5)
+            ->for($otherUser)
+            ->overdue()
+            ->create();
+
+        // Act.
+        Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);
+
+        $response = $this->putJson(
+            route('tasks.update', $tasksAdminUserNotOverdue->first()),
+            ['state' => StateEnum::Done->value]
+        );
+        
+        // Assert.
+        $response->assertOk();
+
+        $this->assertDatabaseHas(
+            'tasks',
+            [
+                'id' => $tasksAdminUserNotOverdue->first()->id,
+                'state' => StateEnum::Done->value,
+            ]
+        );
+    }
+
+
+    /**
+     * Admin can not update tasks that are not overdue for other users.
      */
     public function test_admin_can_not_update_not_overdue_tasks_for_users(): void
     {

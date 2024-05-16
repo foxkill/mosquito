@@ -46,18 +46,24 @@ class CheckTaskUpdateAuthorization
         $isOverdue = now() > $task->deadline;
         $isOwner = $task->user_id == auth()->id();
 
-        abort_if(
-            $isAdmin && ! $isOverdue,
-            Response::HTTP_FORBIDDEN,
-            self::ACCESS_TO_NOT_EXPIRED_DEADLINES_FORBIDDEN
-        );
+        if ($isAdmin) {
+            TaskUpdating::dispatchIf($isOverdue, $task);
+            
+            // Only abort if the task is not overdue and the admin is not the owner.
+            abort_if(
+                ! $isOverdue && ! $isOwner,
+                Response::HTTP_FORBIDDEN,
+                self::DEADLINE_HAS_EXPIRED
+            );  
+            return $next($request);
+        }
 
         TaskUpdating::dispatchIf($isOverdue && $isOwner, $task);
 
         abort_if(
-            $isOverdue && $isOwner,
-            Response::HTTP_UNPROCESSABLE_ENTITY,
-            self::DEADLINE_HAS_EXPIRED
+            $isOverdue || ! $isOwner,
+            Response::HTTP_FORBIDDEN,
+            self::ACCESS_TO_NOT_EXPIRED_DEADLINES_FORBIDDEN
         );
 
         return $next($request);

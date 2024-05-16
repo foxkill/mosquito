@@ -36,10 +36,11 @@ class TaskEventListenerTest extends TestCase
         $tasks = Task::withoutEvents(function () use ($user) {
             return Task::factory(2)
                 ->overdue()
-                ->create([
-                    'user_id' => $user->id,
-                    'state' => StateEnum::Todo->value,
-                ]
+                ->create(
+                    [
+                        'user_id' => $user->id,
+                        'state' => StateEnum::Todo->value,
+                    ]
                 );
         });
 
@@ -48,11 +49,11 @@ class TaskEventListenerTest extends TestCase
 
         $response = $this->putJson(
             route('tasks.update', $tasks->first()),
-            ['state' => StateEnum::InProgess]
+            ['state' => StateEnum::InProgess->value]
         );
 
         // Assert.
-        $response->assertUnprocessable();
+        $response->assertForbidden();
 
         // The user is not an admin user and should not be able
         // to access overdue tasks.
@@ -91,7 +92,7 @@ class TaskEventListenerTest extends TestCase
             ['state' => StateEnum::InProgess]
         );
 
-        $response->assertUnprocessable();
+        $response->assertForbidden();
 
         // Assert
         Mail::assertSent(DeadlineBreachedEmail::class);

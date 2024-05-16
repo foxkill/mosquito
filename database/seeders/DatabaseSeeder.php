@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,14 +24,14 @@ class DatabaseSeeder extends Seeder
             ->create([
                 'name' => 'user1',
                 'email' => 'user1@example.com',
-                'password' => 'user1pw'
+                'password' => 'user1pw',
             ]);
 
         User::factory()
             ->create([
                 'name' => 'user2',
                 'email' => 'user2@example.com',
-                'password' => 'user2pw'
+                'password' => 'user2pw',
             ]);
 
         $user3 = User::factory()
@@ -39,9 +39,9 @@ class DatabaseSeeder extends Seeder
             ->create([
                 'name' => 'user3',
                 'email' => 'user3@example.com',
-                'password' => 'user3pw'
+                'password' => 'user3pw',
             ]);
-        
+
         Task::factory(100)
             ->notOverdue()
             ->for($user3)

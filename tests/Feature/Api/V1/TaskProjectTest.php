@@ -2,21 +2,22 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
 use App\Enums\StateEnum;
-use Laravel\Sanctum\Sanctum;
 use App\Models\Project;
-use App\Models\User;
 use App\Models\Task;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class TaskProjectTest extends TestCase
 {
     // We must use this trait to create tables.
     use RefreshDatabase;
+
     // To use faker within this test class.
     use WithFaker;
 
@@ -29,7 +30,7 @@ class TaskProjectTest extends TestCase
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
 
-        $projects =  Project::factory(3)->create();
+        $projects = Project::factory(3)->create();
 
         $tasks = Task::factory(3)->create([
             'project_id' => $projects[0]->id,
@@ -80,13 +81,13 @@ class TaskProjectTest extends TestCase
             $expectedData = [
                 'title' => 'my title',
                 'description' => 'a cool description',
-                'state' => StateEnum::Todo,
+                'state' => StateEnum::Todo->value,
                 'deadline' => now()->addDays(10),
                 'project_id' => $project->id,
             ]
         );
 
-        // Assert. 
+        // Assert.
         $response->assertCreated();
 
         $this->assertDatabaseHas(
@@ -113,11 +114,11 @@ class TaskProjectTest extends TestCase
                 'description' => 'a cool description',
                 'state' => StateEnum::Todo,
                 'deadline' => now()->addDays(10),
-                'project_id' => 666
+                'project_id' => 666,
             ]
         );
 
-        // Assert. 
+        // Assert.
         $response->assertUnprocessable();
     }
 
@@ -148,7 +149,7 @@ class TaskProjectTest extends TestCase
             ]
         );
 
-        // Assert. 
+        // Assert.
         $response->assertOk();
 
         $this->assertDatabaseHas(
@@ -183,7 +184,7 @@ class TaskProjectTest extends TestCase
             ]
         );
 
-        // Assert. 
+        // Assert.
         $response->assertUnprocessable();
     }
 }

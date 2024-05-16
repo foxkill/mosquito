@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Enums\StateEnum;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
@@ -24,8 +24,8 @@ class TaskFactory extends Factory
     {
         return [
             'title' => fake()->sentence,
-            'description' => fake()->words(asText:true),
-            'state' => fake()->randomElement(array_map(fn($case) => $case->value, StateEnum::cases())),
+            'description' => fake()->words(asText: true),
+            'state' => fake()->randomElement(array_map(fn ($case) => $case->value, StateEnum::cases())),
             // We have always a user.
             'user_id' => User::factory(),
         ];
@@ -54,37 +54,51 @@ class TaskFactory extends Factory
 
     /**
      * Mark a project as overdue.
-     * 
-     * @return static
      */
-    public function overdue(): static 
+    public function overdue(): static
     {
         return $this->state(fn (array $attributes) => [
-            'deadline' => now()->subDays(rand(1, 10))
+            'deadline' => now()->subDays(rand(1, 10)),
         ]);
     }
 
     /**
      * Mark a project as not overdue.
-     * 
-     * @return static
      */
-    public function notOverdue(): static 
+    public function notOverdue(): static
     {
         return $this->state(fn (array $attributes) => [
-            'deadline' => now()->addDays(rand(1, 10))
+            'deadline' => now()->addDays(rand(1, 10)),
         ]);
     }
 
     /**
      * Mark a project as todo.
-     * 
-     * @return static
      */
-    public function todo(): static 
+    public function todo(): static
     {
         return $this->state(fn (array $attributes) => [
             'state' => StateEnum::Todo->value,
+        ]);
+    }
+
+    /**
+     * Mark a project as in progress.
+     */
+    public function inProgess(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'state' => StateEnum::InProgess->value,
+        ]);
+    }
+
+    /**
+     * Mark a project as done.
+     */
+    public function done(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'state' => StateEnum::Done->value,
         ]);
     }
 }

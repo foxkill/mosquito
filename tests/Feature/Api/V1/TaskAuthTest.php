@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
 use App\Enums\Auth\Token\TaskTokenEnum;
-use Laravel\Sanctum\Sanctum;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class TaskAuthTest extends TestCase
@@ -16,7 +16,7 @@ class TaskAuthTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * It should make sure that accessing the 
+     * It should make sure that accessing the
      * read route with incorrect ablities is denied.
      */
     public function test_that_read_route_forbidden(): void
@@ -37,7 +37,7 @@ class TaskAuthTest extends TestCase
     }
 
     /**
-     * It should make sure that accessing the 
+     * It should make sure that accessing the
      * read route is allowed.
      */
     public function test_that_read_route_is_allowed(): void

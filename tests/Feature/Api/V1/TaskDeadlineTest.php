@@ -2,19 +2,20 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Enums\Auth\Token\TaskTokenEnum;
+use App\Enums\StateEnum;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use App\Enums\Auth\Token\TaskTokenEnum;
 use Laravel\Sanctum\Sanctum;
-use App\Enums\StateEnum;
-use App\Models\User;
-use App\Models\Task;
 use Tests\TestCase;
 
 class TaskDeadlineTest extends TestCase
 {
     // We must use this trait to create tables.
     use RefreshDatabase;
+
     // To use faker within this test class.
     use WithFaker;
 
@@ -55,7 +56,7 @@ class TaskDeadlineTest extends TestCase
         $this->assertDatabaseHas(
             'tasks',
             array_merge(
-                $expectedData, 
+                $expectedData,
                 [
                     'id' => $task->id,
                     'deadline' => $deadline,

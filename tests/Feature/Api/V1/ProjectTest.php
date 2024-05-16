@@ -2,21 +2,22 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\ProjectTokenEnum;
-use Laravel\Sanctum\Sanctum;
-use Illuminate\Support\Arr;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
+use Laravel\Sanctum\Sanctum;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ProjectTest extends TestCase
 {
     // We must use this trait to create tables.
     use RefreshDatabase;
+
     // To use faker within this test class.
     use WithFaker;
 
@@ -67,7 +68,7 @@ class ProjectTest extends TestCase
         $response
             ->assertStatus(Response::HTTP_OK)
             ->assertExactJson([
-                'data' => Arr::only($project->toArray(), ['id', 'title'])
+                'data' => Arr::only($project->toArray(), ['id', 'title']),
             ]);
     }
 
@@ -158,7 +159,7 @@ class ProjectTest extends TestCase
             'projects',
             [
                 'id' => $project->id,
-                'title' => $expectedData
+                'title' => $expectedData,
             ]
         );
     }
@@ -254,9 +255,9 @@ class ProjectTest extends TestCase
                                 'description',
                                 'state',
                                 'project_id',
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ]
             );
     }

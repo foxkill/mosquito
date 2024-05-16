@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Enums\Auth\Token\TaskTokenEnum;
-use Laravel\Sanctum\Sanctum;
-use Illuminate\Support\Arr;
 use App\Enums\StateEnum;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -21,6 +21,7 @@ class TaskTest extends TestCase
 
     // We must use this trait to create tables.
     use RefreshDatabase;
+
     // To use faker within this test class.
     use WithFaker;
 
@@ -83,7 +84,7 @@ class TaskTest extends TestCase
         $response
             ->assertOk()
             ->assertJson([
-                'data' => Arr::only($task->toArray(), ['title', 'state', 'description'])
+                'data' => Arr::only($task->toArray(), ['title', 'state', 'description']),
             ]);
     }
 
@@ -116,8 +117,8 @@ class TaskTest extends TestCase
             ->assertJsonCount(10, 'data')
             ->assertJson([
                 'data' => [
-                    Arr::only($tasks->toArray(), ['title', 'state', 'description'])
-                ]
+                    Arr::only($tasks->toArray(), ['title', 'state', 'description']),
+                ],
             ]);
     }
 
@@ -178,7 +179,7 @@ class TaskTest extends TestCase
     }
 
     /**
-     * It should update a task. 
+     * It should update a task.
      */
     public function test_should_update_a_task(): void
     {
@@ -218,9 +219,9 @@ class TaskTest extends TestCase
     }
 
     /**
-     * It should not be able to update a task if the max length of the title is 
+     * It should not be able to update a task if the max length of the title is
      * surpassed.
-     * 
+     *
      * Exam Additional Part.
      */
     public function test_should_not_be_able_to_update_a_task_if_surpassing_title_limit(): void
@@ -245,7 +246,7 @@ class TaskTest extends TestCase
     }
 
     /**
-     * It should delete a task. 
+     * It should delete a task.
      */
     public function test_should_delete_a_task(): void
     {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1\Tasks;
 
-use App\Http\Requests\V1\PatchTaskRequest;
 use App\Api\V1\Actions\UpdateTaskAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\PatchTaskRequest;
 use App\Models\Task;
 
 class TaskUpdateController extends Controller

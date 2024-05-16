@@ -8,7 +8,7 @@ class UpdateTaskAction
 {
     /**
      * Update an existing task.
-     * 
+     *
      * @return Task
      */
     public function execute(Task $task, array $taskData): bool

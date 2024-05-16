@@ -22,7 +22,7 @@ class CreatorScope implements Scope
         if (auth()->user()->isAdmin()) {
             return;
         }
-        
+
         // Allow only the owner of the task to access it.
         $builder->where('user_id', auth()->id());
     }

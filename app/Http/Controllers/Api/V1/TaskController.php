@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Requests\V1\UpdateTaskRequest;
-use App\Http\Requests\V1\StoreTaskRequest;
-use App\Http\Resources\V1\TaskResource;
-use App\Http\Controllers\Controller;
 use App\Enums\StateEnum;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreTaskRequest;
+use App\Http\Requests\V1\UpdateTaskRequest;
+use App\Http\Resources\V1\TaskResource;
 use App\Models\Task;
 
 class TaskController extends Controller
@@ -24,18 +24,22 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        /** @var \App\Model\User $user */
+        /** @var \App\Models\User $user */
         $user = auth()->user();
 
-        return $user->tasks()->create(
-            array_merge(
-                $request->validated(),
-                [
-                    // Make sure the state is set to "todo" when creating a new task.
-                    'state' => StateEnum::Todo,
-                ]
-            )
-        );
+        $data = $request->validated();
+
+        $task = $user->tasks()->create(array_merge(
+            $data,
+            ['state' => StateEnum::Todo->value]
+        ));
+
+        if ($request->has('project_id')) {
+            $task->project()->associate($request->input('project_id'));
+            $task->save();
+        }
+
+        return $task;
     }
 
     /**
@@ -43,8 +47,15 @@ class TaskController extends Controller
      */
     public function update(Task $task, UpdateTaskRequest $request)
     {
-        // What about sanetizing the input?
-        return $task->update($request->validated());
+        $result = $task->update($request->validated());
+
+        if ($request->has('project_id')) {
+            $task->refresh();
+            $task->project()->associate($request->input('project_id'));
+            $task->save();
+        }
+
+        return $result;
     }
 
     /**
@@ -53,6 +64,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
+
         // Return 204 - No content.
         return response()->noContent();
     }

@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\Auth\Roles\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use App\Enums\Auth\Roles\Role;
 use Illuminate\Support\Str;
 
 /**
@@ -46,10 +46,8 @@ class UserFactory extends Factory
 
     /**
      * Indicate the the user is an adminstrator.
-     * 
-     * @return static
      */
-    public function admin(): static 
+    public function admin(): static
     {
         return $this->state(fn (array $attributes) => [
             'role_id' => Role::ADMINISTRATOR->value,

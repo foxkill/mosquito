@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Enums\StateEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Enums\StateEnum;
 
 class UpdateTaskRequest extends FormRequest
 {
@@ -28,8 +28,8 @@ class UpdateTaskRequest extends FormRequest
             'description' => 'sometimes|required',
             'state' => [
                 'sometimes',
-                'required', 
-                Rule::in(StateEnum::InProgess->value, StateEnum::Done->value)
+                'required',
+                Rule::in(StateEnum::InProgess->value, StateEnum::Done->value),
             ],
             'project_id' => 'sometimes|exists:projects,id',
             'deadline' => 'sometimes|required|date|after:today',

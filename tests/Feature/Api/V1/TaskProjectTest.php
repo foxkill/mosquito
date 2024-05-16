@@ -81,7 +81,7 @@ class TaskProjectTest extends TestCase
             $expectedData = [
                 'title' => 'my title',
                 'description' => 'a cool description',
-                'state' => StateEnum::Todo,
+                'state' => StateEnum::Todo->value,
                 'deadline' => now()->addDays(10),
                 'project_id' => $project->id,
             ]

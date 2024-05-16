@@ -11,7 +11,8 @@
 			"extensions": [
 				"bmewburn.vscode-intelephense-client",
                 "xdebug.php-debug",
-				"rangav.vscode-thunder-client"
+				"rangav.vscode-thunder-client",
+				"sourcegraph.cody-ai"
 				// "mikestead.dotenv",
 				// "amiralizadeh9480.laravel-extra-intellisense",
 				// "ryannaddy.laravel-artisan",

@@ -220,7 +220,7 @@ class TaskOverdueTest extends TestCase
             route('tasks.update', $tasksAdminUserOverdue->first()),
             ['state' => StateEnum::Done->value]
         );
-        
+
         // Assert.
         $response->assertOk();
 
@@ -273,7 +273,7 @@ class TaskOverdueTest extends TestCase
             route('tasks.update', $tasksAdminUserNotOverdue->first()),
             ['state' => StateEnum::Done->value]
         );
-        
+
         // Assert.
         $response->assertOk();
 
@@ -285,7 +285,6 @@ class TaskOverdueTest extends TestCase
             ]
         );
     }
-
 
     /**
      * Admin can not update tasks that are not overdue for other users.

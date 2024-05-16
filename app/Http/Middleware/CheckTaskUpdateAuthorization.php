@@ -48,13 +48,14 @@ class CheckTaskUpdateAuthorization
 
         if ($isAdmin) {
             TaskUpdating::dispatchIf($isOverdue, $task);
-            
+
             // Only abort if the task is not overdue and the admin is not the owner.
             abort_if(
                 ! $isOverdue && ! $isOwner,
                 Response::HTTP_FORBIDDEN,
                 self::DEADLINE_HAS_EXPIRED
-            );  
+            );
+
             return $next($request);
         }
 

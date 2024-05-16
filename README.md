@@ -259,7 +259,7 @@ ab -n 100 -c 10 \
 
 ## Contributors
 
-- Stefan Martin
+- Me
 
 ## License
 

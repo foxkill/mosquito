@@ -81,4 +81,24 @@ class TaskFactory extends Factory
             'state' => StateEnum::Todo->value,
         ]);
     }
+
+    /**
+     * Mark a project as in progress.
+     */
+    public function inProgess(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'state' => StateEnum::InProgess->value,
+        ]);
+    }
+
+    /**
+     * Mark a project as done.
+     */
+    public function done(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'state' => StateEnum::Done->value,
+        ]);
+    }
 }

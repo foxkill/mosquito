@@ -42,7 +42,9 @@ class CheckTaskUpdateAuthorization
             return $next($request);
         }
 
-        $isAdmin = auth()->user()?->isAdmin() ?? false;
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        $isAdmin = $user?->isAdmin() ?? false;
         $isOverdue = now() > $task->deadline;
         $isOwner = $task->user_id == auth()->id();
 

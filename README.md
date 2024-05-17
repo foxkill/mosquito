@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/foxkill/mosquito/assets/7531860/19a06321-8566-4ae9-ae21-6b4e177f1663" width="300" heigh="300" /></p>
+<p align="center"><img src="https://github.com/foxkill/mosquito/assets/7531860/19a06321-8566-4ae9-ae21-6b4e177f1663" width="200" heigh="200" /></p>
 
 # Mosquito Task Management API
 

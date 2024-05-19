@@ -184,8 +184,9 @@ You will find the routes for the import in postman under:
 1. **Remove unused classes from the Use-Statements**:
    - ~~Identify and remove any unused classes from the Use-Statements to declutter the codebase and improve maintainability.~~
 
+# Notes
 
-### Notes
+## Middleware
 
 This would have normally been in my middleware: 
 
@@ -202,7 +203,13 @@ CheckForAnyAbility::class
 
 which were enabled, I did not implement the auth middleware specifically.
 
-### Optimizations
+## Invoke the debugger for the API
+
+```
+curl --help --location 'http://localhost/api/login?XDEBUG_TRIGGER=1'\n
+```
+
+# Optimizations
 
 I added a TaskIndexResource that limits the output related to the Description. After that 
 I created an index to the state field to speed up queries here.
@@ -350,8 +357,8 @@ Optimization (create specific index resource to limit the output of description 
 Final Steps:
 sail artisan make:enum Auth/Token/UserTasksToken
 
+
 - TOD0: 
-    * Rename CanEditDeadLines -> CheckTaskUpdateAuthorization
     * Remove .scripd folder from project add to .gitignore
     * Enum Cast in Model
     * session.php: 'driver' => env('SESSION_DRIVER', 'redis'),

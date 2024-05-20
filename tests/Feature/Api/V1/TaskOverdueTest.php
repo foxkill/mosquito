@@ -29,22 +29,16 @@ class TaskOverdueTest extends TestCase
         $user = User::factory()->create();
 
         $tasksOverdue = Task::factory(3)
+            ->for($user)
             ->overdue()
-            ->create(
-                [
-                    'user_id' => $user->id,
-                    'state' => StateEnum::InProgess,
-                ]
-            );
+            ->inProgress()
+            ->create();
 
         $tasksNotOverdue = Task::factory(2)
+            ->for($user)
             ->notOverdue()
-            ->create(
-                [
-                    'user_id' => $user->id,
-                    'state' => StateEnum::InProgess,
-                ]
-            );
+            ->inProgress()
+            ->create();
 
         $mostOverdue = $tasksOverdue->min('deadline');
 
@@ -87,37 +81,40 @@ class TaskOverdueTest extends TestCase
 
         // The admin user should not have task.
         $taskAdminUserOverdue = Task::factory(1)
+            ->for($adminUser)
             ->overdue()
-            ->create(
-                ['user_id' => $adminUser->id]
-            );
+            ->create();
 
         $taskAdminUserNotOverdue = Task::factory(3)
+            ->for($adminUser)
             ->notOverdue()
-            ->create(
-                ['user_id' => $adminUser->id]
-            );
+            ->create();
 
         // User
         $tasksUserOverdue = Task::factory(3)
+            ->for($user)
             ->overdue()
-            ->create(['user_id' => $user->id]);
+            ->create();
 
         Task::factory(2)
+            ->for($user)
             ->notOverdue()
-            ->create(['user_id' => $user->id]);
+            ->create();
 
         // OtherUser
         Task::factory(5)
-            ->create(['user_id' => $otherUser->id]);
+            ->for($otherUser)
+            ->create();
 
         Task::factory(2)
+            ->for($otherUser)
             ->notOverdue()
-            ->create(['user_id' => $otherUser->id]);
+            ->create();
 
         $taskOtherUserOverdue = Task::factory(1)
+            ->for($otherUser)
             ->overdue()
-            ->create(['user_id' => $otherUser->id]);
+            ->create();
 
         $countTasksOverdueAndOwnTasks =
             count($taskAdminUserOverdue) +
@@ -148,20 +145,16 @@ class TaskOverdueTest extends TestCase
 
         // Create overdue tasks.
         $tasksUserOverdue = Task::factory(3)
+            ->for($user)
             ->overdue()
-            ->create(
-                [
-                    'user_id' => $user->id,
-                    'state' => StateEnum::InProgess->value,
-                ]
-            );
+            ->inProgress()
+            ->create();
 
         // Create tasks that are not overdue, but have a deadline.
         $tasksOtherUserNotOverdue = Task::factory(5)
+            ->for($otherUser)
             ->notOverdue()
-            ->create(
-                ['user_id' => $otherUser->id]
-            );
+            ->create();
 
         // Act.
         Sanctum::actingAs($adminUser, [TaskTokenEnum::Update->value]);
@@ -201,11 +194,8 @@ class TaskOverdueTest extends TestCase
         $tasksUserOverdue = Task::factory(3)
             ->for($user)
             ->overdue()
-            ->create(
-                [
-                    'state' => StateEnum::InProgess->value,
-                ]
-            );
+            ->inProgress()
+            ->create();
 
         // Create tasks that are not overdue, but have a deadline.
         $tasksOtherUserOverdue = Task::factory(5)
@@ -247,18 +237,14 @@ class TaskOverdueTest extends TestCase
         $tasksAdminUserNotOverdue = Task::factory(3)
             ->for($adminUser)
             ->notOverdue()
-            ->create(
-                ['state' => StateEnum::InProgess->value]
-            );
+            ->inProgress()
+            ->create();
 
         $tasksUserOverdue = Task::factory(3)
             ->for($user)
             ->overdue()
-            ->create(
-                [
-                    'state' => StateEnum::InProgess->value,
-                ]
-            );
+            ->inProgress()
+            ->create();
 
         // Create tasks that are not overdue, but have a deadline.
         $tasksOtherUserOverdue = Task::factory(5)
@@ -297,13 +283,10 @@ class TaskOverdueTest extends TestCase
 
         // Create overdue tasks.
         $tasksUserOverdue = Task::factory(3)
+            ->for($user)
             ->overdue()
-            ->create(
-                [
-                    'user_id' => $user->id,
-                    'state' => StateEnum::InProgess,
-                ]
-            );
+            ->inProgress()
+            ->create();
 
         // Create tasks that are not overdue, but have a deadline.
         $tasksUserNotOverdue = Task::factory(5)
